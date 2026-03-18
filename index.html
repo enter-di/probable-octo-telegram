@@ -539,8 +539,8 @@ manage(new_candle=True)
   → Everything above, PLUS:
   → Increment bars_open per trade
   → bars_open ≥ 32 → force close (8h exit)</div>
-    <p><strong>8-minute bug (fixed v3):</strong> <span class="warn">bars_open incremented every 15s loop</span>. 32 × 15s = 8 min. Both day-1 live trades died at exactly 8 minutes. Fixed with <span class="ok">new_candle=True</span> gate.</p>
-    <p><strong>Fake WIN bug (fixed v2):</strong> P&L accidentally read account balance. WIN = <span class="warn">+$100,000.71</span>. Fixed with <span class="ok">get_closed_deal_profit(ticket)</span>.</p>`},
+    <p><strong>8-minute bug (fixed):</strong> <span class="warn">bars_open incremented every 15s loop</span>. 32 × 15s = 8 min. Both day-1 live trades died at exactly 8 minutes. Fixed with <span class="ok">new_candle=True</span> gate.</p>
+    <p><strong>Fake WIN bug (fixed):</strong> MT5 history_deals_get was ignoring the position filter and summing all deals including the initial balance deposit. WIN notification showed <span class="warn">+$99,777.28</span> (account balance) instead of actual trade P&L. Fixed with position-only query + deal type filter + 3-retry loop for MT5 history latency.</p>`},
 
   symbols:{tag:'Instruments',title:'The four symbols',body:`
     <table class="tbl">
@@ -653,7 +653,7 @@ lots   = risk / (pips × pip_value_per_lot)
   probability:{tag:'Assessment',title:'Challenge probability',body:`
     <p>Current estimate: <span class="ok" style="font-size:24px;font-family:var(--mono)">68–70%</span></p>
     <div class="divider"></div>
-    <p><strong>Working for us:</strong> All 4 version bugs fixed. 57.5% WR over 7 profitable months. EURUSD PF 1.80. Spread filter live. Genuine FTMO-compliant risk management.</p>
+    <p><strong>Working for us:</strong> All known bugs fixed — bars_open timing, duplicate notifications, MT5 disconnect guard, server timezone, fake WIN P&L. 57.5% WR over 7 profitable months. EURUSD PF 1.80. Spread filter live. Genuine FTMO-compliant risk management. 3 live trades placed and won on day 2 of demo.</p>
     <p><strong>Concerns:</strong> Live WR likely drops to 52–55% from slippage. EURUSD + AUDUSD + EURJPY all USD-correlated — one Fed surprise = 3 simultaneous losses = 1.5% in one candle.</p>
     <div class="divider"></div>
     <p><span class="ok">1.</span> <strong>RR → 1.3</strong> — needs 2 weeks demo data first. Only needs 43.5% WR to break even.</p>
