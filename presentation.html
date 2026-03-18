@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTMO Trading Bot — System Presentation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #080c12;
+            --bg2: #0d1421;
+            --green: #00e5a0;
+            --gold: #ffc947;
+            --red: #ff4757;
+            --blue: #4a9eff;
+            --text: #e8edf5;
+            --muted: #8899aa;
+            --border: rgba(255,255,255,0.08);
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #progress {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            background: var(--green);
+            transition: width 0.2s linear;
+            z-index: 100;
+            box-shadow: 0 0 12px var(--green);
+        }
+
+        #slides { width: 100vw; height: 100vh; position: relative; }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 56px 80px 100px;
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            pointer-events: none;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+
+        .slide.exit {
+            opacity: 0;
+            transform: translateY(-24px);
+        }
+
+        #controls {
+            position: fixed;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            background: rgba(13,20,33,0.9);
+            padding: 10px 22px;
+            border-radius: 50px;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(20px);
+            z-index: 100;
+        }
+
+        #controls button {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 17px;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        #controls button:hover { background: rgba(255,255,255,0.08); }
+
+        #slide-counter {
+            color: var(--muted);
+            font-size: 13px;
+            min-width: 52px;
+            text-align: center;
+        }
+
+        #voice-indicator {
+            position: fixed;
+            top: 18px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--muted);
+            background: rgba(255,255,255,0.04);
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            z-index: 100;
+        }
+
+        .voice-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: var(--muted);
+            transition: background 0.2s;
+        }
+
+        .voice-dot.speaking {
+            background: var(--green);
+            animation: speak-pulse 0.5s infinite alternate;
+        }
+
+        @keyframes speak-pulse {
+            from { opacity: 0.4; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1.3); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.55; }
+        }
+
+        @keyframes arrow-pulse {
+            0%, 100% { opacity: 1; transform: translateX(0); }
+            50% { opacity: 0.35; transform: translateX(5px); }
+        }
+
+        /* Typography */
+        .section-tag {
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--green);
+            margin-bottom: 10px;
+        }
+
+        h2 { font-size: 34px; font-weight: 700; margin-bottom: 28px; }
+        h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+        p { color: var(--muted); font-size: 14px; line-height: 1.65; }
+
+        /* Layouts */
+        .slide-content { width: 100%; max-width: 1040px; }
+        .slide-header { margin-bottom: 30px; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 1040px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; width: 100%; max-width: 1040px; }
+        .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; width: 100%; max-width: 1040px; }
+
+        /* Cards */
+        .card {
+            background: rgba(255,255,255,0.035);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 22px;
+        }
+
+        .card.green-border { border-color: rgba(0,229,160,0.28); }
+        .card.gold-border  { border-color: rgba(255,201,71,0.28); }
+        .card.blue-border  { border-color: rgba(74,158,255,0.28); }
+        .glow-green { box-shadow: 0 0 32px rgba(0,229,160,0.1); }
+        .glow-gold  { box-shadow: 0 0 32px rgba(255,201,71,0.1); }
+
+        /* Stats */
+        .stat-value { font-size: 40px; font-weight: 700; color: var(--green); line-height: 1; }
+        .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+        .num-green  { color: var(--green); font-weight: 700; }
+        .num-gold   { color: var(--gold);  font-weight: 700; }
+        .num-red    { color: var(--red); }
+
+        /* Table */
+        .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .data-table th {
+            text-align: left;
+            padding: 9px 14px;
+            color: var(--muted);
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+        }
+        .data-table td { padding: 11px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+        .data-table tr:last-child td { border-bottom: none; }
+
+        /* Architecture */
+        .arch-flow { display: flex; align-items: center; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        .arch-node {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 18px 24px;
+            text-align: center;
+            min-width: 130px;
+        }
+        .arch-node .icon  { font-size: 26px; margin-bottom: 6px; }
+        .arch-node .label { font-size: 12px; color: var(--muted); }
+        .arch-node .name  { font-size: 14px; font-weight: 600; }
+        .arch-arrow { color: var(--green); font-size: 22px; animation: arrow-pulse 1.5s infinite; }
+
+        /* Risk rows */
+        .risk-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 11px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .risk-item:last-child { border-bottom: none; }
+
+        /* Momentum bar */
+        .momentum-bar { font-size: 20px; letter-spacing: 2px; margin: 6px 0; }
+
+        /* Backgrounds */
+        .bg-r1 { background: radial-gradient(ellipse at 20% 50%, #0d2040 0%, #080c12 60%); }
+        .bg-r2 { background: radial-gradient(ellipse at 80% 30%, #0d1a10 0%, #080c12 60%); }
+        .bg-r3 { background: radial-gradient(ellipse at 50% 80%, #1a0d20 0%, #080c12 60%); }
+        .bg-title { background: radial-gradient(ellipse at center, #0d2040 0%, #080c12 70%); }
+
+        .badge {
+            display: inline-block;
+            background: rgba(0,229,160,0.12);
+            border: 1px solid var(--green);
+            color: var(--green);
+            padding: 5px 18px;
+            border-radius: 50px;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 28px;
+            animation: pulse 2.5s infinite;
+        }
+    </style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<div id="voice-indicator">
+    <div class="voice-dot" id="voice-dot"></div>
+    <span id="voice-label">Voiceover ready</span>
+</div>
+
+<div id="slides">
+
+<!-- ═══ SLIDE 1: TITLE ═══ -->
+<div class="slide bg-title active" id="s0">
+    <div style="text-align:center;">
+        <div class="badge">● LIVE SYSTEM</div>
+        <h1 style="font-size:54px;font-weight:700;line-height:1.1;margin-bottom:16px;background:linear-gradient(135deg,#fff 0%,var(--green) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+            FTMO Automated<br>Trading Bot
+        </h1>
+        <p style="font-size:18px;color:var(--muted);max-width:520px;margin:0 auto 48px;">
+            Multi-instrument forex system trading 24/7 on MetaTrader 5 — built for FTMO funded accounts
+        </p>
+        <div style="display:flex;gap:48px;justify-content:center;">
+            <div style="text-align:center;"><div class="stat-value">4</div><div class="stat-label">Instruments</div></div>
+            <div style="text-align:center;"><div class="stat-value" style="color:var(--gold)">57.5%</div><div class="stat-label">Backtest Win Rate</div></div>
+            <div style="text-align:center;"><div class="stat-value">1.36</div><div class="stat-label">Profit Factor</div></div>
+            <div style="text-align:center;"><div class="stat-value" style="color:var(--gold)">+24.5%</div><div class="stat-label">6-Month Return</div></div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ SLIDE 2: ARCHITECTURE ═══ -->
+<div class="slide bg-r1" id="s1">
+    <div class="slide-content">
+        <div class="slide-header">
+            <div class="section-tag">System Architecture</div>
+            <h2>How It Works</h2>
+        </div>
+        <div class="arch-flow" style="margin-bottom:32px;">
+            <div class="arch-node"><div class="icon">☁️</div><div class="name">AWS VPS</div><div class="label">London / 24/7</div></div>
+            <div class="arch-arrow">→</div>
+            <div class="arch-node" style="border-color:rgba(0,229,160,0.4)"><div class="icon">🤖</div><div class="name">Python Bot</div><div class="label">main.py</div></div>
+            <div class="arch-arrow">→</div>
+            <div class="arch-node"><div class="icon">📊</div><div class="name">MetaTrader 5</div><div class="label">MT5 Terminal</div></div>
+            <div class="arch-arrow">→</div>
+            <div class="arch-node"><div class="icon">🏦</div><div class="name">FTMO Server</div><div class="label">UTC+3</div></div>
+        </div>
+        <div style="text-align:center;color:var(--green);font-size:20px;margin-bottom:28px;animation:arrow-pulse 1.5s infinite;">↕ Telegram ↕</div>
+        <div class="grid-3">
+            <div class="card"><h3>⏱ 15-second cycle</h3><p>Scans every candle close across all 4 instruments simultaneously</p></div>
+            <div class="card"><h3>🔄 Fully autonomous</h3><p>No manual intervention required — risk, sizing, entries and exits all automated</p></div>
+            <div class="card"><h3>📱 Telegram control</h3><p>/status /trades /why — full visibility from your phone anywhere in the world</p></div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ SLIDE 3: INSTRUMENTS ═══ -->
+<div class="slide bg-r2" id="s2">
+    <div class="slide-content">
+        <div class="slide-header">
+            <div class="section-tag">What We Trade</div>
+            <h2>4 Instruments, Selected by Data</h2>
+        </div>
+        <div class="grid-4" style="margin-bottom:20px;">
+            <div class="card green-border glow-green">
+                <div style="font-size:22px;margin-bottom:10px;">💶</div>
+                <h3>EURUSD</h3>
+                <p>Most liquid pair. Momentum only.</p>
+                <div style="margin-top:12px;font-size:11px;color:var(--green);">Max spread: 1.5 pips</div>
+            </div>
+            <div class="card green-border">
+                <div style="font-size:22px;margin-bottom:10px;">🦘</div>
+                <h3>AUDUSD</h3>
+                <p>Commodity currency. Momentum only.</p>
+                <div style="margin-top:12px;font-size:11px;color:var(--green);">Max spread: 1.8 pips</div>
+            </div>
+            <div class="card green-border">
+                <div style="font-size:22px;margin-bottom:10px;">🇬🇧</div>
+                <h3>GBPJPY</h3>
+                <p>High volatility. Both strategies.</p>
+                <div style="margin-top:12px;font-size:11px;color:var(--green);">Max spread: 5.0 pips</div>
+            </div>
+            <div class="card green-border">
+                <div style="font-size:22px;margin-bottom:10px;">🇯🇵</div>
+                <h3>EURJPY</h3>
+                <p>Strong trends. Momentum only.</p>
+                <div style="margin-top:12px;font-size:11px;color:var(--green);">Max spread: 2.8 pips</div>
+            </div>
+        </div>
+        <div class="card" style="background:rgba(255,71,87,0.05);border-color:rgba(255,71,87,0.2);">
+            <p style="font-size:13px;">❌  <strong style="color:var(--text)">XAUUSD (Gold) was tested and removed</strong> — Profit Factor of 1.11 was insufficient to justify high spreads and volatility risk. Only pairs with PF > 1.25 are included.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ SLIDE 4: MOMENTUM STRATEGY ═══ -->
+<div class="slide bg-r1" id="s3">
+    <div class="slide-content">
+        <div class="slide-header">
+            <div class="section-tag">Strategy 1 of 2</div>
+            <h2>Momentum Burst</h2>
+        </div>
+        <div class="grid-2">
+            <div style="display:flex;flex-direction:column;gap:16px;">
+                <div class="card green-border">
+                    <h3 style="color:var(--green);margin-bottom:14px;">Entry Conditions</h3>
+                    <div style="font-size:13px;display:flex;flex-direction:column;gap:9px;">
+                        <div>📏 Candle body <strong>&gt; 1.2× ATR</strong> (exceptional candle size)</div>
+                        <div>📊 Body ratio <strong>&gt; 65%</strong> of full high-low range</div>
+                        <div>📈 RSI between <strong>28 – 72</strong> (no extreme levels)</div>
+                        <div>📉 H1 trend alignment via <strong>EMA 50 / 200</strong></div>
+                        <div>⏰ Session only: <strong>08:30 – 19:30 London time</strong></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 style="margin-bottom:12px;">Trade Parameters</h3>
+                    <div style="font-size:13px;display:flex;flex-direction:column;gap:7px;">
+                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Stop Loss</span><span>Candle low/high ± 0.3× ATR</span></div>
+                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Take Profit</span><span class="num-green">1:1 Risk-Reward</span></div>
+                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Time exit</span><span>32 bars max (8 hours)</span></div>
+                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Cooldown</span><span>12 bars between entries</span></div>
+                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Max per day</span><span>2 trades per symbol</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card" style="display:flex;flex-direction:column;gap:20px;">
+                <h3>Live Signal Example</h3>
+                <div style="font-family:monospace;font-size:13px;background:rgba(0,0,0,0.35);padding:16px;border-radius:10px;line-height:2.1;">
+                    <div style="color:var(--green);font-weight:bold;">BUY  EURUSD  #123456</div>
+                    <div style="color:var(--muted);">Momentum  •  0.50 lots  •  1:1 RR</div>
+                    <div style="margin-top:6px;">Entry &nbsp;<span style="color:var(--text)">1.08542</span></div>
+                    <div>SL &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--red)">1.08392</span></div>
+                    <div>TP &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--green)">1.08692</span></div>
+                    <div style="margin-top:6px;color:var(--muted);font-size:11px;">Body=0.00210  ATR=0.00175  RSI=58</div>
+                </div>
+                <div>
+                    <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Momentum Strength Indicator</div>
+                    <div class="momentum-bar" style="color:var(--green);">▰▰▰▰▰▰▰▰ 100% — Signal fired</div>
+                    <div class="momentum-bar" style="color:var(--green);opacity:.65;">▰▰▰▰▰▱▱▱ 69% — Watching</div>
+                    <div class="momentum-bar" style="color:var(--muted);">▰▰▰▱▱▱▱▱ 35% — No signal</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ SLIDE 5: ASIAN BREAKOUT ═══ -->
+<div class="slide bg-r3" id="s4">
+    <div class="slide-content">
+        <div class="slide-header">
+            <div class="section-tag">Strategy 2 of 2</div>
+            <h2>Asian Range Breakout</h2>
+        </div>
+        <div class="grid-2">
+            <div style="display:flex;flex-direction:column;gap:16px;">
+                <div class="card blue-border">
+                    <h3 style="color:var(--blue);margin-bottom:14px;">3-Phase Execution</h3>
+                    <div style="font-size:13px;display:flex;flex-direction:column;gap:14px;">
+                        <div>
+                            <div style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">Phase 1 — Overnight (00:00–08:00 London)</div>
+                            Bot records the overnight <strong>consolidation high and low</strong>
+                        </div>
+                        <div>
+                            <div style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">Phase 2 — London Open Watch (08:00–10:00)</div>
+                            Bot monitors for a <strong>decisive close outside the range</strong>
+                        </div>
+                        <div>
+                            <div style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">Phase 3 — Execute</div>
+                            Entry on confirmed breakout candle, SL at opposite side of Asian range
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 style="margin-bottom:12px;">Parameters</h3>
+                    <div style="font-size:13px;display:flex;flex-direction:column;gap:7px;">
+                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Instrument</span><span>GBPJPY only</span></div>
+                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Valid range size</span><span>0.5× – 4.0× ATR</span></div>
+                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Take Profit</span><span class="num-gold">1.5:1 Risk-Reward</span></div>
+                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Trend filter</span><span>H1 EMA 50/200</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card gold-border glow-gold" style="display:flex;flex-direction:column;justify-content:space-between;">
+                <div>
+                    <h3 style="color:var(--gold);margin-bottom:14px;">Why This Works</h3>
+                    <p style="margin-bottom:16px;">Asian session creates a defined price range as liquidity is low. At London open, institutional order flow breaks the range with strong momentum — a predictable daily pattern in forex markets.</p>
+                    <p>The bot captures this move with a superior <strong style="color:var(--gold)">1.5:1 risk-reward ratio</strong> — higher than the momentum strategy — because breakout moves tend to run further after a clean range hold.</p>
+                </div>
+                <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border);">
+                    <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">Once per day, per symbol — no repeat entries</div>
+                    <div style="font-size:12px;color:var(--muted);">Range too tight or too wide → no trade (volatility filter)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ SLIDE 6: RISK MANAGEMENT ═══ -->
+<div class="slide bg-r1" id="s5">
+    <div class="slide-content">
+        <div class="slide-header">
+            <div class="section-tag">Capital Protection</div>
+            <h2>FTMO-Compliant Risk Management</h2>
+        </div>
+        <div class="grid-2">
+            <div class="card green-border">
+                <h3 style="color:var(--green);margin-bottom:18px;">Core Risk Rules</h3>
+                <div class="risk-item">
+                    <div><div style="font-size:13px;font-weight:600;">Risk per trade</div><div style="font-size:11px;color:var(--muted);">Auto-calculated from current balance</div></div>
+                    <div class="num-green" style="font-size:18px;">0.5%</div>
+                </div>
+                <div class="risk-item">
+                    <div><div style="font-size:13px;font-weight:600;">Daily loss limit</div><div style="font-size:11px;color:var(--muted);">FTMO allows 5% — we cap at 3%</div></div>
+                    <div class="num-green">3% self-imposed</div>
+                </div>
+                <div class="risk-item">
+                    <div><div style="font-size:13px;font-weight:600;">Overall drawdown limit</div><div style="font-size:11px;color:var(--muted);">FTMO allows 10% — we cap at 7%</div></div>
+                    <div class="num-green">7% self-imposed</div>
+                </div>
+                <div class="risk-item">
+                    <div><div style="font-size:13px;font-weight:600;">Emergency close trigger</div><div style="font-size:11px;color:var(--muted);">All positions closed instantly</div></div>
+                    <div style="font-size:12px;">4% daily / 8.5% overall</div>
+                </div>
+                <div class="risk-item">
+                    <div><div style="font-size:13px;font-weight:600;">Consecutive loss stop</div><div style="font-size:11px;color:var(--muted);">Pause trading for the rest of the day</div></div>
+                    <div style="font-size:12px;">After 5 in a row</div>
+                </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:16px;">
+                <div class="card">
+                    <h3 style="margin-bottom:12px;">Auto Position Sizing</h3>
+                    <div style="font-family:monospace;font-size:12px;background:rgba(0,0,0,0.3);padding:12px;border-radius:8px;color:var(--green);line-height:1.9;">
+                        risk_amount = balance × 0.5%<br>
+                        lots = risk ÷ (SL_pips × pip_value)<br>
+                        <span style="color:var(--muted)">— scales automatically as account grows</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 style="margin-bottom:12px;">Additional Safeguards</h3>
+                    <div style="font-size:13px;display:flex;flex-direction:column;gap:7px;">
+                        <div>✅ Max 3 open positions at any time</div>
+                        <div>✅ Max 1 position per symbol</div>
+                        <div>✅ Max 2 trades per symbol per day</div>
+                        <div>✅ Spread filter — blocks news spike entries</div>
+                        <div>✅ Friday close at 20:00 London</div>
+                        <div>✅ Half risk auto-applied at 4% drawdown</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ SLIDE 7: BACKTEST + LIVE ═══ -->
+<div class="slide bg-r2" id="s6">
+    <div class="slide-content">
+        <div class="slide-header">
+            <div class="section-tag">Validation</div>
+            <h2>Backtest Results &amp; First Live Day</h2>
+        </div>
+        <div class="grid-4" style="margin-bottom:22px;">
+            <div class="card" style="text-align:center;"><div class="stat-value">313</div><div class="stat-label">Total Trades</div></div>
+            <div class="card" style="text-align:center;"><div class="stat-value" style="color:var(--gold)">57.5%</div><div class="stat-label">Win Rate</div></div>
+            <div class="card" style="text-align:center;"><div class="stat-value">1.36</div><div class="stat-label">Profit Factor</div></div>
+            <div class="card" style="text-align:center;"><div class="stat-value" style="color:var(--gold)">3.58%</div><div class="stat-label">Max Drawdown</div></div>
+        </div>
+        <div class="grid-2">
+            <div class="card">
+                <h3 style="margin-bottom:14px;">Backtest vs Live Expectation</h3>
+                <table class="data-table">
+                    <tr><th>Metric</th><th>Backtest</th><th>Est. Live</th></tr>
+                    <tr><td>Win Rate</td><td class="num-green">57.5%</td><td>52–55%</td></tr>
+                    <tr><td>Profit Factor</td><td class="num-green">1.36</td><td>1.15–1.25</td></tr>
+                    <tr><td>Monthly Return</td><td class="num-green">~4.0%</td><td>2.0–3.0%</td></tr>
+                    <tr><td>Max Drawdown</td><td class="num-green">3.58%</td><td>5–7%</td></tr>
+                </table>
+            </div>
+            <div class="card gold-border glow-gold">
+                <h3 style="color:var(--gold);margin-bottom:14px;">Live Trading — March 17, 2026</h3>
+                <div style="font-size:13px;display:flex;flex-direction:column;gap:9px;">
+                    <div style="display:flex;justify-content:space-between;padding:9px 12px;background:rgba(0,229,160,0.08);border-radius:7px;"><span>EURUSD BUY</span><span class="num-green">✅ TP Hit</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:9px 12px;background:rgba(0,229,160,0.08);border-radius:7px;"><span>AUDUSD BUY</span><span class="num-green">✅ TP Hit</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:9px 12px;background:rgba(0,229,160,0.08);border-radius:7px;"><span>EURJPY BUY</span><span class="num-green">✅ TP Hit</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:9px 12px;background:rgba(255,201,71,0.1);border-radius:7px;border:1px solid rgba(255,201,71,0.25);">
+                        <span style="color:var(--gold);font-weight:600;">Day P&amp;L</span>
+                        <span style="color:var(--gold);font-weight:700;">$99,754 → $100,662</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ SLIDE 8: FTMO SCALING ═══ -->
+<div class="slide bg-r1" id="s7">
+    <div class="slide-content">
+        <div class="slide-header">
+            <div class="section-tag">The Growth Engine</div>
+            <h2>FTMO Scaling Plan</h2>
+        </div>
+        <div class="grid-2" style="margin-bottom:20px;">
+            <div class="card green-border">
+                <h3 style="color:var(--green);margin-bottom:14px;">Scale-Up Requirements</h3>
+                <div style="font-size:13px;display:flex;flex-direction:column;gap:9px;">
+                    <div>⏱ Every <strong>4-month trading cycle</strong></div>
+                    <div>📈 At least <strong>10% net profit</strong> in the window</div>
+                    <div>💰 Minimum <strong>2 payouts</strong> processed</div>
+                    <div>✅ <strong>Positive balance</strong> at time of scale-up</div>
+                    <div style="margin-top:6px;padding:10px;background:rgba(0,229,160,0.08);border-radius:8px;font-size:12px;">
+                        10% in 4 months = <strong class="num-green">2.5% per month</strong> — our target threshold
+                    </div>
+                </div>
+            </div>
+            <div class="card gold-border glow-gold">
+                <h3 style="color:var(--gold);margin-bottom:14px;">What You Get on Scale-Up</h3>
+                <div style="font-size:13px;display:flex;flex-direction:column;gap:9px;">
+                    <div>📊 Account balance <strong>+25% automatically</strong></div>
+                    <div>💎 Profit split <strong>upgraded 80% → 90%</strong> permanently</div>
+                    <div>🔁 Repeats every 4 months indefinitely</div>
+                    <div>🚀 Maximum possible account: <strong>$2,000,000</strong></div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <h3 style="margin-bottom:14px;">Single Account — 2-Year Growth at 2.5%/month</h3>
+            <table class="data-table">
+                <tr><th>Period</th><th>Account Size</th><th>Split</th><th>Monthly Gross</th><th>Your Payout</th><th>SGD (~1.35)</th></tr>
+                <tr><td>Month 0–4</td><td>$100,000</td><td>80%</td><td>$2,500</td><td>$2,000</td><td>~2,700</td></tr>
+                <tr style="background:rgba(0,229,160,0.05)"><td>Month 4–8</td><td class="num-green">$125,000 ↑</td><td class="num-green">90%</td><td>$3,125</td><td>$2,813</td><td>~3,800</td></tr>
+                <tr style="background:rgba(0,229,160,0.08)"><td>Month 8–12</td><td class="num-green">$156,250 ↑</td><td class="num-green">90%</td><td>$3,906</td><td>$3,516</td><td>~4,750</td></tr>
+                <tr style="background:rgba(0,229,160,0.11)"><td>Month 12–16</td><td class="num-gold">$195,313 ↑</td><td class="num-green">90%</td><td>$4,883</td><td>$4,395</td><td class="num-gold">~5,930</td></tr>
+                <tr style="background:rgba(255,201,71,0.07)"><td>Month 24+</td><td class="num-gold">$381,470 ↑</td><td class="num-green">90%</td><td>$9,537</td><td>$8,583</td><td class="num-gold" style="font-size:15px;">~11,590</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ SLIDE 9: 3-ACCOUNT PROJECTION ═══ -->
+<div class="slide bg-r2" id="s8">
+    <div class="slide-content">
+        <div class="slide-header">
+            <div class="section-tag">The 2-Year Income Plan</div>
+            <h2>3 Funded Accounts by End of 2027</h2>
+        </div>
+        <div class="grid-3" style="margin-bottom:22px;">
+            <div class="card green-border">
+                <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;">Account 1</div>
+                <h3>Funded Sep 2026</h3>
+                <p style="font-size:12px;margin:4px 0 14px;">15 months → scaled to $195K</p>
+                <div class="stat-value" style="font-size:30px;">SGD 5,930</div>
+                <div class="stat-label">per month — Dec 2027</div>
+            </div>
+            <div class="card green-border">
+                <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;">Account 2</div>
+                <h3>Funded Dec 2026</h3>
+                <p style="font-size:12px;margin:4px 0 14px;">12 months → scaled to $156K</p>
+                <div class="stat-value" style="font-size:30px;">SGD 4,750</div>
+                <div class="stat-label">per month — Dec 2027</div>
+            </div>
+            <div class="card green-border">
+                <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;">Account 3</div>
+                <h3>Funded Apr 2027</h3>
+                <p style="font-size:12px;margin:4px 0 14px;">8 months → scaled to $125K</p>
+                <div class="stat-value" style="font-size:30px;">SGD 3,800</div>
+                <div class="stat-label">per month — Dec 2027</div>
+            </div>
+        </div>
+        <div class="card gold-border glow-gold" style="padding:22px 30px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div>
+                    <div style="font-size:13px;color:var(--muted);margin-bottom:6px;">Combined Monthly Income — December 2027</div>
+                    <div style="font-size:52px;font-weight:800;color:var(--gold);line-height:1;">SGD 14,480</div>
+                    <div style="font-size:13px;color:var(--muted);margin-top:4px;">≈ USD 10,724 per month — fully automated</div>
+                </div>
+                <div style="text-align:right;">
+                    <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">How to get there</div>
+                    <div style="font-size:13px;margin-bottom:6px;">✅ Same bot, 3 × .env files</div>
+                    <div style="font-size:13px;margin-bottom:6px;">✅ Challenges run in parallel</div>
+                    <div style="font-size:13px;">✅ FTMO scaling does the rest</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ SLIDE 10: CLOSING ═══ -->
+<div class="slide bg-title" id="s9">
+    <div style="text-align:center;max-width:720px;">
+        <div class="badge">THE PLAN</div>
+        <h1 style="font-size:46px;font-weight:700;line-height:1.15;margin-bottom:22px;background:linear-gradient(135deg,#fff 0%,var(--green) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+            Consistent. Compounding.<br>Fully Automated.
+        </h1>
+        <p style="font-size:17px;max-width:560px;margin:0 auto 44px;">
+            The system is live. The strategy is validated. The scaling plan is clear.<br>
+            Now it's about patience and letting the compounding work.
+        </p>
+        <div class="grid-3" style="text-align:left;">
+            <div class="card green-border">
+                <div style="font-size:26px;margin-bottom:8px;">📍</div>
+                <h3 style="margin-bottom:4px;">Now — 2026 Q1</h3>
+                <p style="font-size:12px;">Demo running. Collecting live data. Validating edge before challenge.</p>
+            </div>
+            <div class="card gold-border">
+                <div style="font-size:26px;margin-bottom:8px;">🚀</div>
+                <h3 style="margin-bottom:4px;">2026 Q3–Q4</h3>
+                <p style="font-size:12px;">First funded account. Scaling begins. Second challenge starts in parallel.</p>
+            </div>
+            <div class="card blue-border">
+                <div style="font-size:26px;margin-bottom:8px;">💰</div>
+                <h3 style="margin-bottom:4px;">End of 2027</h3>
+                <p style="font-size:12px;">3 funded accounts. SGD 14,000+/month. Fully autonomous income.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div><!-- /slides -->
+
+<!-- Controls -->
+<div id="controls">
+    <button onclick="prevSlide()" title="Previous (←)">◀</button>
+    <button onclick="togglePlay()" id="play-btn" title="Play/Pause (P)">⏸</button>
+    <span id="slide-counter">1 / 10</span>
+    <button onclick="nextSlide()" title="Next (→)">▶</button>
+    <button onclick="toggleVoice()" id="voice-btn" style="font-size:13px;border-left:1px solid rgba(255,255,255,0.1);margin-left:8px;padding-left:18px;">🔊 Voice</button>
+</div>
+
+<script>
+const SLIDES   = document.querySelectorAll('.slide');
+const TOTAL    = SLIDES.length;
+
+const NARRATION = [
+    "Welcome. This is an overview of a fully automated FTMO trading system — built to trade forex markets 24 hours a day and generate consistent monthly income through a prop firm funded account.",
+    "The system runs on a Windows server in London, connecting directly to MetaTrader 5 and the FTMO trading server. Every 15 seconds, the Python bot scans the market, manages open trades, and enforces risk rules — completely autonomously. You stay in control via Telegram notifications on your phone.",
+    "The bot trades four carefully selected forex pairs: Euro Dollar, Aussie Dollar, British Pound Yen, and Euro Yen. Each pair was chosen through rigorous backtesting — only instruments with a profit factor above 1.25 made the cut. Gold was tested and removed because its high spreads made the edge insufficient.",
+    "The primary strategy is called Momentum Burst. When a 15-minute candle shows exceptional strength — body larger than 1.2 times the Average True Range — the bot recognises a high-probability signal. It only trades in the direction of the hourly trend, and RSI filters prevent entries at extreme levels. Risk-reward is 1 to 1.",
+    "The second strategy is the Asian Range Breakout, used on British Pound Yen. Overnight, the bot measures the consolidation range. At London open, if price breaks cleanly with a confirmed close, the bot enters — targeting 1.5 times the risk. This captures predictable institutional order flow at the London session open.",
+    "Risk management is built specifically for FTMO compliance. Each trade risks exactly 0.5% of balance — calculated and sized automatically. The daily loss limit is self-imposed at 3%, well below FTMO's 5% allowance. An emergency close triggers at 4% daily or 8.5% overall drawdown. No manual oversight required.",
+    "Six months of backtesting across 313 trades shows a 57.5% win rate, profit factor of 1.36, and a total return of 24.5% with maximum drawdown of just 3.58 percent. On the first live trading day — March 17th 2026 — all three signals hit take profit, growing the balance from 99,754 to 100,662 US dollars.",
+    "FTMO's scaling plan is the compounding engine behind this system. Every 4 months, when the account generates 10% net profit — that is 2.5% per month — FTMO increases the account balance by 25% and upgrades the profit split from 80% to 90% permanently. One account growing from 100,000 reaches nearly 200,000 within the first year alone.",
+    "With three funded accounts running in parallel by the end of 2027, projected monthly income reaches 14,480 Singapore dollars. Account one, scaled after 15 months, pays 5,930 per month. Account two contributes 4,750. Account three adds 3,800. The same bot code, three separate environment files — no new strategies required.",
+    "The system is live. The strategy is validated. The plan is clear. Three funded accounts, automated execution, compounding growth through FTMO's scaling plan. By the end of 2027 — over 14,000 Singapore dollars per month, fully autonomous."
+];
+
+const TIMING = [5, 9, 8, 9, 8, 9, 9, 10, 10, 7];
+
+let current  = 0;
+let playing  = true;
+let voiceOn  = true;
+let timer    = null;
+let rafId    = null;
+let pStart   = null;
+let pDur     = 0;
+
+const progBar  = document.getElementById('progress');
+const counter  = document.getElementById('slide-counter');
+const playBtn  = document.getElementById('play-btn');
+const voiceBtn = document.getElementById('voice-btn');
+const voiceDot = document.getElementById('voice-dot');
+const voiceLbl = document.getElementById('voice-label');
+
+function goTo(idx) {
+    if (idx < 0 || idx >= TOTAL) return;
+    SLIDES[current].classList.remove('active');
+    SLIDES[current].classList.add('exit');
+    const prev = current;
+    setTimeout(() => {
+        SLIDES[prev].classList.remove('exit');
+        current = idx;
+        SLIDES[current].classList.add('active');
+        counter.textContent = `${current + 1} / ${TOTAL}`;
+        if (voiceOn) speak(NARRATION[current]);
+        if (playing) scheduleNext();
+        setProgress(current / TOTAL * 100);
+    }, 300);
+}
+
+function nextSlide() { clear(); goTo(current < TOTAL - 1 ? current + 1 : 0); }
+function prevSlide() { clear(); goTo(Math.max(0, current - 1)); }
+
+function clear() {
+    if (timer) clearTimeout(timer);
+    if (rafId) cancelAnimationFrame(rafId);
+    window.speechSynthesis.cancel();
+}
+
+function scheduleNext() {
+    clear();
+    pStart = performance.now();
+    pDur   = TIMING[current] * 1000;
+    animProg();
+    timer = setTimeout(() => { goTo(current < TOTAL - 1 ? current + 1 : 0); }, pDur);
+}
+
+function animProg() {
+    const e   = performance.now() - pStart;
+    const pct = Math.min(e / pDur, 1);
+    setProgress((current + pct) / TOTAL * 100);
+    if (pct < 1) rafId = requestAnimationFrame(animProg);
+}
+
+function setProgress(pct) { progBar.style.width = pct + '%'; }
+
+function togglePlay() {
+    playing = !playing;
+    playBtn.textContent = playing ? '⏸' : '▶';
+    if (playing) scheduleNext(); else clear();
+}
+
+function toggleVoice() {
+    voiceOn = !voiceOn;
+    voiceBtn.textContent = voiceOn ? '🔊 Voice' : '🔇 Voice';
+    if (!voiceOn) { window.speechSynthesis.cancel(); voiceDot.classList.remove('speaking'); voiceLbl.textContent = 'Voice off'; }
+    else voiceLbl.textContent = 'Voiceover ready';
+}
+
+function speak(text) {
+    if (!voiceOn || !window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 0.87; u.pitch = 1.0; u.volume = 1.0;
+    const voices = window.speechSynthesis.getVoices();
+    const pick = voices.find(v => /Google UK English|Daniel|Alex|Samantha/.test(v.name));
+    if (pick) u.voice = pick;
+    u.onstart = () => { voiceDot.classList.add('speaking'); voiceLbl.textContent = 'Speaking...'; };
+    u.onend   = () => { voiceDot.classList.remove('speaking'); voiceLbl.textContent = 'Voiceover ready'; };
+    window.speechSynthesis.speak(u);
+}
+
+// Boot
+window.speechSynthesis.onvoiceschanged = () => {};
+setTimeout(() => { speak(NARRATION[0]); scheduleNext(); }, 900);
+
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    if (e.key === 'ArrowLeft') prevSlide();
+    if (e.key === 'p' || e.key === 'P') togglePlay();
+    if (e.key === 'v' || e.key === 'V') toggleVoice();
+});
+</script>
+</body>
+</html>
