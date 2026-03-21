@@ -248,7 +248,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;height:var(--nav);
       <rect x="140" y="174" width="3" height="54" rx="1.5" fill="#a78bfa"/>
       <text x="156" y="193" font-family="Space Mono" font-size="8" fill="#a78bfa" letter-spacing="1">COMMS</text>
       <text class="nt" x="156" y="210" font-family="Space Mono" font-size="11" font-weight="700" fill="#aaa">Telegram API</text>
-      <text x="156" y="222" font-family="DM Sans" font-size="10" fill="#6a6a75">/status /trades /buy /sell /closeall</text>
+      <text x="156" y="222" font-family="DM Sans" font-size="10" fill="#6a6a75">/status /trades /news /why /closeall</text>
       <rect class="nh" x="140" y="174" width="260" height="54" rx="8"/>
     </g>
     <line x1="270" y1="148" x2="270" y2="172" stroke="#2e2e3e" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#a0)"/>
@@ -374,7 +374,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;height:var(--nav);
       <rect x="14" y="932" width="3" height="80" rx="1.5" fill="#3ecf8e"/>
       <text x="30" y="952" font-family="Space Mono" font-size="8" fill="#3ecf8e" letter-spacing="1">PRIMARY</text>
       <text class="nt" x="30" y="970" font-family="Space Mono" font-size="11" font-weight="700" fill="#aaa">Momentum Burst</text>
-      <text x="30" y="986" font-family="DM Sans" font-size="11" fill="#6a6a75">All 4 pairs · M15 · 1:1 RR</text>
+      <text x="30" y="986" font-family="DM Sans" font-size="11" fill="#6a6a75">All 5 pairs · M15 · 1.3:1 RR</text>
       <text x="30" y="1004" font-family="DM Sans" font-size="10" fill="#3e3e4a">Body &gt; 1.2×ATR · ratio &gt; 65%</text>
       <rect class="nh" x="14" y="932" width="252" height="80" rx="8"/>
     </g>
@@ -509,8 +509,8 @@ get_symbol_info(symbol)  # spread, lot limits</div>
       <tr><td>/trades</td><td>Open positions with SL, TP, P&L</td></tr>
       <tr><td>/history</td><td>Last 10 closed trades</td></tr>
       <tr><td>/why</td><td>Market scan — momentum %, RSI</td></tr>
-      <tr><td>/news</td><td>Upcoming HIGH-impact events</td></tr>
-      <tr><td>/buy EURUSD</td><td>Manual BUY with ATR sizing</td></tr>
+      <tr><td>/news</td><td>Today's HIGH-impact events</td></tr>
+      <tr><td>/news week</td><td>Full week news calendar</td></tr>
       <tr><td>/closeall</td><td>Emergency close everything</td></tr>
     </table>`},
 
@@ -582,7 +582,7 @@ manage(new_candle=True)
     <p>The London-NY overlap (13:00–15:30) is peak global liquidity — where the backtest shows the strongest win rates. All times are UTC (= London time in winter).</p>`},
 
   c_fri:{tag:'Entry Checklist · 05',title:'Friday close window',body:`
-    <p>All positions close at <strong>Friday 20:00 server time</strong>. No weekend holds.</p>
+    <p>All positions close at <strong>Friday 23:00 UTC</strong> (after market close ~22:00). No weekend holds.</p>
     <p>Forex closes Friday evening and reopens Sunday night. During those 48 hours, surprise events can gap price far past your stop loss. On a $100K challenge account, one bad gap can wipe a week of gains in a single fill.</p>`},
 
   c_spread:{tag:'Entry Checklist · 06',title:'Spread filter',body:`
@@ -593,6 +593,7 @@ manage(new_candle=True)
       <tr><td>AUDUSD</td><td>~1.2 pips</td><td>1.8 pips</td></tr>
       <tr><td>GBPJPY</td><td>~2.5 pips</td><td>4.0 pips</td></tr>
       <tr><td>EURJPY</td><td>~1.8 pips</td><td>2.8 pips</td></tr>
+      <tr><td>GBPUSD</td><td>~1.2 pips</td><td>1.8 pips</td></tr>
     </table>
     <p>NFP/FOMC can spike EURUSD spreads to 5–10 pips. Entering during a spike burns half your SL distance at entry. The filter blocks this automatically — no news API needed.</p>`},
 
@@ -604,11 +605,11 @@ manage(new_candle=True)
 → Block signal if inside window</div>
     <table class="tbl">
       <tr><th>Currency</th><th>Blocked symbols</th></tr>
-      <tr><td>USD</td><td>AUDUSD</td></tr>
+      <tr><td>USD</td><td>AUDUSD, GBPUSD</td></tr>
       <tr><td>EUR</td><td>EURJPY</td></tr>
       <tr><td>JPY</td><td>GBPJPY, EURJPY</td></tr>
       <tr><td>AUD</td><td>AUDUSD</td></tr>
-      <tr><td>GBP</td><td>GBPJPY</td></tr>
+      <tr><td>GBP</td><td>GBPJPY, GBPUSD</td></tr>
     </table>
     <p><span class="ok">EURUSD is exempt</span> — backtest shows it <strong>performs better</strong> during news (WR 57.9%, PF 1.68 vs clean WR 52.3%).</p>
     <p>Graceful degradation: if the API is unreachable, the bot trades normally without the filter. Notifications are rate-limited — one alert per (symbol, event) pair.</p>`},
@@ -622,10 +623,10 @@ H1 EMA50/200 not opposing    # trade structure</div>
     <div class="stats">
       <div class="stat"><div class="sv hl">57.5%</div><div class="sl">Backtest WR</div></div>
       <div class="stat"><div class="sv hl">1.36</div><div class="sl">Profit factor</div></div>
-      <div class="stat"><div class="sv g">1:1</div><div class="sl">Risk/reward</div></div>
-      <div class="stat"><div class="sv g">3.58%</div><div class="sl">Max DD (6mo)</div></div>
+      <div class="stat"><div class="sv g">1.3:1</div><div class="sl">Risk/reward</div></div>
+      <div class="stat"><div class="sv g">~4%</div><div class="sl">Max DD (26mo)</div></div>
     </div>
-    <p><strong>Why 1:1 RR?</strong> M15 momentum fades in 4–8 bars. At 2:1, price rarely travels far enough cleanly. At 1:1 with 57.5% WR: 57.5 − 42.5 = +15 units per 100 trades.</p>`},
+    <p><strong>Why 1.3:1 RR?</strong> Backtested across RR 1.0–1.5 over 26 months (1,932 trades). RR 1.3 is the portfolio optimum: +$41,595 net vs +$35,734 at 1.0. PF 1.28. Higher RR compensates for the lower WR — only needs 43.5% to break even.</p>`},
 
   asian:{tag:'Strategy',title:'Asian Range Breakout',body:`
     <p>GBPJPY only. Measures overnight consolidation and trades the London open breakout.</p>
@@ -675,7 +676,7 @@ lots   = risk / (pips × pip_value_per_lot)
       <tr><td>Daily/symbol</td><td>2</td></tr>
       <tr><td>Cooldown</td><td>12 bars / 3h</td></tr>
       <tr><td>Consec losses</td><td>5 → stop day</td></tr>
-      <tr><td>Friday close</td><td>20:00</td></tr>
+      <tr><td>Friday close</td><td>23:00 UTC</td></tr>
     </table>`},
 
   probability:{tag:'Assessment',title:'Challenge probability',body:`
@@ -684,9 +685,10 @@ lots   = risk / (pips × pip_value_per_lot)
     <p><strong>Working for us:</strong> 57.5% WR over 7 profitable months. EURUSD PF 1.80. Spread filter blocks high-spread entries automatically. Self-imposed risk limits give 30–40% buffer vs FTMO hard limits.</p>
     <p><strong>Concerns:</strong> Live WR likely drops to 52–55% from slippage. EURUSD + AUDUSD + EURJPY all USD-correlated — one Fed surprise = 3 simultaneous losses = 1.5% in one candle.</p>
     <div class="divider"></div>
-    <p><span class="ok">1.</span> <strong>RR → 1.3</strong> — needs 2 weeks demo data first. Only needs 43.5% WR to break even.</p>
-    <p><span class="ok">2.</span> <strong>Correlation guard</strong> — 1 USD position max. Kills the 3× simultaneous loss scenario.</p>
-    <p><span class="ok">3.</span> <s>News filter</s> — <span class="ok">DONE</span>. Auto FF calendar blocks AUDUSD/EURJPY/GBPJPY during HIGH events. EURUSD exempt (WR improves during news).</p>`}
+    <p><span class="ok">1.</span> <s>RR 1.3</s> — <span class="ok">DONE</span>. Backtested 1.0–1.5 over 26mo. 1.3 is portfolio optimum (+$41,595 net, PF 1.28).</p>
+    <p><span class="ok">2.</span> <s>News filter</s> — <span class="ok">DONE</span>. Auto FF calendar blocks affected symbols during HIGH events. EURUSD exempt.</p>
+    <p><span class="ok">3.</span> <s>GBPUSD</s> — <span class="ok">DONE</span>. Added after backtest (PF 1.06, +$6,527/26mo).</p>
+    <p><span class="hl">4.</span> <strong>Correlation guard</strong> — 1-2 USD positions max. Planned for next iteration.</p>`}
 };
 
 /* ── STATE ── */
