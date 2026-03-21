@@ -336,7 +336,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;height:var(--nav);
     <g class="sn" id="n-c4" onclick="tap('c_sess',this)">
       <rect class="nr" x="24" y="704" width="156" height="46" rx="6" fill="#13131c" stroke="#2a2a38" stroke-width="1"/>
       <text x="36" y="722" font-family="Space Mono" font-size="8" fill="#c9a84c">04</text>
-      <text x="36" y="738" font-family="DM Sans" font-size="11" fill="#6a6a75">Session 08:30–19:30</text>
+      <text x="36" y="738" font-family="DM Sans" font-size="11" fill="#6a6a75">Session 08:30–15:30</text>
       <rect class="nh" x="24" y="704" width="156" height="46" rx="6"/>
     </g>
     <g class="sn" id="n-c5" onclick="tap('c_fri',this)">
@@ -576,9 +576,9 @@ manage(new_candle=True)
     <p>After any trade on a symbol, that symbol is locked for <strong>12 M15 bars = 3 hours</strong>, regardless of win or loss.</p>
     <p>Prevents revenge trading. Three hours is enough for the original market condition to fully resolve — any new signal after is based on fresh price action, not residual noise.</p>`},
 
-  c_sess:{tag:'Entry Checklist · 04',title:'Session filter 08:30–19:30',body:`
-    <p>Only trades during <strong>London open through NY close</strong>. Before 08:30 the Asian session has thin volume — momentum candles represent one market maker moving a thin book, not real flow.</p>
-    <p>The London-NY overlap (13:30–17:00) is peak global liquidity — where the backtest shows the strongest win rates. After 19:30 NY thins and edge degrades.</p>`},
+  c_sess:{tag:'Entry Checklist · 04',title:'Session filter 08:30–15:30',body:`
+    <p>Only trades during <strong>London open through NY morning</strong> — the window validated by backtest. Before 08:30 the Asian session has thin volume. After 15:30 the edge degrades in the data.</p>
+    <p>The London-NY overlap (13:00–15:30) is peak global liquidity — where the backtest shows the strongest win rates. All times are UTC (= London time in winter).</p>`},
 
   c_fri:{tag:'Entry Checklist · 05',title:'Friday close window',body:`
     <p>All positions close at <strong>Friday 20:00 server time</strong>. No weekend holds.</p>
