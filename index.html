@@ -491,7 +491,7 @@ nav::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
       <rect x="80" y="1070" width="3" height="66" rx="1.5" fill="#3ecf8e"/>
       <text x="96" y="1090" font-family="Space Mono" font-size="8" fill="#3ecf8e" letter-spacing="1">POSITION SIZING</text>
       <text class="nt" x="96" y="1108" font-family="Space Mono" font-size="11" font-weight="700" fill="#aaa">Calculate lot size</text>
-      <text x="96" y="1126" font-family="DM Sans" font-size="10" fill="#6a6a75">lots = (balance × 0.5%) ÷ (pips × pip_val)</text>
+      <text x="96" y="1126" font-family="DM Sans" font-size="10" fill="#6a6a75">lots = (balance × 1.0%) ÷ (pips × pip_val)</text>
       <rect class="nh" x="80" y="1070" width="380" height="66" rx="8"/>
     </g>
     <line x1="270" y1="1138" x2="270" y2="1166" stroke="#2e2e3e" stroke-width="1" marker-end="url(#a0)"/>
@@ -601,6 +601,7 @@ get_symbol_info(symbol)  # spread, lot limits</div>
       <tr><td>/news</td><td>Today's HIGH-impact events</td></tr>
       <tr><td>/news week</td><td>Full week news calendar</td></tr>
       <tr><td>/closeall</td><td>Emergency close everything</td></tr>
+      <tr><td>/progress</td><td>Challenge phase completion</td></tr>
     </table>`},
 
   candle:{tag:'Main Loop',title:'New M15 candle?',body:`
@@ -656,7 +657,8 @@ manage(new_candle=True)
   c_dd:{tag:'Entry Checklist · 01',title:'DD limits & position cap',body:`
     <p><strong>Daily 3%:</strong> If today's equity dropped 3%, no new entries. FTMO allows 5% — 2% buffer remains for open trades to recover.</p>
     <p><strong>Overall 7% DD:</strong> If equity is 7% below initial balance, no new entries. FTMO's hard limit is 10% — 3% headroom left.</p>
-    <p><strong>Max 3 open positions:</strong> Caps maximum one-event loss to 1.5% (3 × 0.5%) even if a USD shock hits all pairs at once.</p>`},
+    <p><strong>Max 3 open positions:</strong> Caps maximum one-event loss to 3% (3 × 1.0%) even if a USD shock hits all pairs at once.</p>
+    <p><strong>Correlation guard:</strong> Max 2 positions per currency (e.g., max 2 USD pairs open). Limits correlated-event exposure — a single Fed surprise can hit at most 2 positions = 2% max loss.</p>`},
 
   c_open:{tag:'Entry Checklist · 02',title:'No open trade on symbol',body:`
     <p>Max <strong>1 open trade per symbol</strong> at any time. If EURUSD already has a position, no new EURUSD signals fire until it closes.</p>
@@ -730,18 +732,18 @@ TP = 1.5:1 RR</div>
     <p><strong>Why GBPJPY?</strong> GBP moves sharply at London open. JPY consolidates tightly overnight. The combination creates clean ranges that break decisively when London participants arrive.</p>`},
 
   sizing:{tag:'Execution',title:'Position sizing',body:`
-    <p>Every trade risks exactly <strong>0.5% of balance</strong>. Lot size is derived from the SL distance so dollar risk is always constant.</p>
-    <div class="cb">risk   = balance × 0.005
+    <p>Every trade risks exactly <strong>1.0% of balance</strong>. Lot size is derived from the SL distance so dollar risk is always constant.</p>
+    <div class="cb">risk   = balance × 0.01
 sl     = ATR × 1.3
 pips   = sl / pip_size
 lots   = risk / (pips × pip_value_per_lot)
 
 # EURUSD $100K, ATR=8 pips:
-# risk=$500, SL=10.4 pips
-# lots = 500 / (10.4 × 10) = 4.81</div>
+# risk=$1000, SL=10.4 pips
+# lots = 1000 / (10.4 × 10) = 9.62</div>
     <div class="stats">
-      <div class="stat"><div class="sv hl">0.5%</div><div class="sl">Normal risk</div></div>
-      <div class="stat"><div class="sv hl">0.25%</div><div class="sl">Half-risk >4% DD</div></div>
+      <div class="stat"><div class="sv hl">1.0%</div><div class="sl">Normal risk</div></div>
+      <div class="stat"><div class="sv hl">Gradual</div><div class="sl">DD scaling</div></div>
       <div class="stat"><div class="sv">$10</div><div class="sl">EURUSD pip/lot</div></div>
       <div class="stat"><div class="sv">$6.50</div><div class="sl">JPY pip/lot</div></div>
     </div>`},
@@ -758,8 +760,9 @@ lots   = risk / (pips × pip_value_per_lot)
   botlimits:{tag:'Risk',title:'Bot self-imposed limits',body:`
     <table class="tbl">
       <tr><th>Rule</th><th>Value</th></tr>
-      <tr><td>Risk/trade</td><td>0.5%</td></tr>
-      <tr><td>Half-risk DD</td><td>4%</td></tr>
+      <tr><td>Risk/trade</td><td>1.0%</td></tr>
+      <tr><td>Gradual DD scaling</td><td>2%→70%, 3%→50%, 4%→35%, 5%+→25%</td></tr>
+      <tr><td>Correlation guard</td><td>Max 2 per currency</td></tr>
       <tr><td>Max positions</td><td>3</td></tr>
       <tr><td>Max/symbol</td><td>1</td></tr>
       <tr><td>Daily/symbol</td><td>2</td></tr>
@@ -772,12 +775,13 @@ lots   = risk / (pips × pip_value_per_lot)
     <p>Current estimate: <span class="ok" style="font-size:24px;font-family:var(--mono)">68–70%</span></p>
     <div class="divider"></div>
     <p><strong>Working for us:</strong> ~55% WR at 1.3:1 RR over 26 months (1,932 trades). PF 1.28 portfolio. Spread filter blocks high-spread entries automatically. Self-imposed risk limits give 30–40% buffer vs FTMO hard limits.</p>
-    <p><strong>Concerns:</strong> Live WR likely drops to 52–55% from slippage. EURUSD + AUDUSD + EURJPY all USD-correlated — one Fed surprise = 3 simultaneous losses = 1.5% in one candle.</p>
+    <p><strong>Concerns:</strong> Live WR likely drops to 52–55% from slippage. EURUSD + AUDUSD + EURJPY all USD-correlated — correlation guard now limits this to max 2 positions per currency = 2% max loss in one event.</p>
     <div class="divider"></div>
     <p><span class="ok">1.</span> <s>RR 1.3</s> — <span class="ok">DONE</span>. Backtested 1.0–1.5 over 26mo. 1.3 is portfolio optimum (+$41,595 net, PF 1.28).</p>
     <p><span class="ok">2.</span> <s>News filter</s> — <span class="ok">DONE</span>. Auto FF calendar blocks affected symbols during HIGH events. EURUSD exempt.</p>
     <p><span class="ok">3.</span> <s>GBPUSD</s> — <span class="ok">DONE</span>. Added after backtest (PF 1.06, +$6,527/26mo).</p>
-    <p><span class="hl">4.</span> <strong>Correlation guard</strong> — 1-2 USD positions max. Planned for next iteration.</p>`}
+    <p><span class="ok">4.</span> <s>Correlation guard</s> — <span class="ok">DONE</span>. Max 2 positions per currency.</p>
+    <p><span class="ok">5.</span> <s>Gradual risk scaling</s> — <span class="ok">DONE</span>. DD-based risk reduction: 2%→70%, 3%→50%, 4%→35%, 5%+→25%.</p>`}
 };
 
 /* ── STATE ── */
