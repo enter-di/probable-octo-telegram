@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="description" content="Automated FTMO prop firm trading bot — 5 forex pairs, M15 momentum detection, FTMO-compliant risk management.">
+<meta name="description" content="Automated FTMO prop firm trading bot — 5 forex pairs + XAUUSD gold, momentum detection + gold strategies, FTMO-compliant risk management.">
 <meta property="og:title" content="FTMO Bot — How It Works">
-<meta property="og:description" content="Automated prop firm trading bot. 5 forex pairs, M15 momentum detection, 1.3:1 RR, news filter, FTMO-compliant risk engine.">
+<meta property="og:description" content="Automated prop firm trading bot. 5 forex pairs + XAUUSD, M15 momentum + H1 gold strategies, news filter, FTMO-compliant risk engine.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text x='4' y='26' font-size='24' fill='%23d4af37'>&#x25C8;</text></svg>">
 <title>FTMO Bot — How It Works</title>
@@ -267,12 +267,12 @@ nav::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
       <span class="sb-sep">·</span>
       <span><span class="sb-val">26</span><span class="sb-lbl"> months</span></span>
       <span class="sb-sep">·</span>
-      <span><span class="sb-val">5</span><span class="sb-lbl"> pairs</span></span>
+      <span><span class="sb-val">6</span><span class="sb-lbl"> instruments</span></span>
     </div>
     <div class="diag-hint">tap any node to explore</div>
     <div class="tap-hint">▼ tap a node · explanation slides up</div>
 
-    <svg id="diagram" width="100%" viewBox="0 0 540 1440" xmlns="http://www.w3.org/2000/svg">
+    <svg id="diagram" width="100%" viewBox="0 0 540 1530" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <marker id="a0" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
         <path d="M2 1L8 5L2 9" fill="none" stroke="#3e3e4a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -378,7 +378,7 @@ nav::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
       <rect x="80" y="440" width="3" height="54" rx="1.5" fill="#c9a84c"/>
       <text x="96" y="459" font-family="Space Mono" font-size="8" fill="#c9a84c" letter-spacing="1">MGMT</text>
       <text class="nt" x="96" y="477" font-family="Space Mono" font-size="11" font-weight="700" fill="#aaa">Manage open trades</text>
-      <text x="96" y="489" font-family="DM Sans" font-size="10" fill="#6a6a75">Cleanup closed · bars_open++ · 32-bar exit</text>
+      <text x="96" y="489" font-family="DM Sans" font-size="10" fill="#6a6a75">Cleanup · bars_open++ · time exits</text>
       <rect class="nh" x="80" y="440" width="380" height="54" rx="8"/>
     </g>
     <line x1="270" y1="496" x2="270" y2="524" stroke="#2e2e3e" stroke-width="1" marker-end="url(#a0)"/>
@@ -389,7 +389,7 @@ nav::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
       <rect x="80" y="526" width="3" height="54" rx="1.5" fill="#a78bfa"/>
       <text x="96" y="545" font-family="Space Mono" font-size="8" fill="#a78bfa" letter-spacing="1">SYMBOLS</text>
       <text class="nt" x="96" y="563" font-family="Space Mono" font-size="11" font-weight="700" fill="#aaa">Scan each symbol</text>
-      <text x="96" y="575" font-family="DM Sans" font-size="10" fill="#6a6a75">EURUSD · AUDUSD · GBPJPY · EURJPY · GBPUSD</text>
+      <text x="96" y="575" font-family="DM Sans" font-size="10" fill="#6a6a75">EURUSD · AUDUSD · GBPJPY · EURJPY · GBPUSD · XAUUSD</text>
       <rect class="nh" x="80" y="526" width="380" height="54" rx="8"/>
     </g>
     <line x1="270" y1="582" x2="270" y2="610" stroke="#2e2e3e" stroke-width="1" marker-end="url(#a0)"/>
@@ -462,7 +462,7 @@ nav::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
       <rect x="14" y="932" width="3" height="80" rx="1.5" fill="#3ecf8e"/>
       <text x="30" y="952" font-family="Space Mono" font-size="8" fill="#3ecf8e" letter-spacing="1">PRIMARY</text>
       <text class="nt" x="30" y="970" font-family="Space Mono" font-size="11" font-weight="700" fill="#aaa">Momentum Burst</text>
-      <text x="30" y="986" font-family="DM Sans" font-size="11" fill="#6a6a75">All 5 pairs · M15 · 1.3:1 RR</text>
+      <text x="30" y="986" font-family="DM Sans" font-size="11" fill="#6a6a75">5 forex pairs · M15 · 1.3:1 RR</text>
       <text x="30" y="1004" font-family="DM Sans" font-size="10" fill="#3e3e4a">Body &gt; 1.2×ATR · ratio &gt; 65%</text>
       <rect class="nh" x="14" y="932" width="252" height="80" rx="8"/>
     </g>
@@ -478,58 +478,79 @@ nav::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
       <rect class="nh" x="276" y="932" width="250" height="80" rx="8"/>
     </g>
 
-    <line class="flow" x1="270" y1="1014" x2="270" y2="1042" stroke="#3ecf8e" stroke-width="1" marker-end="url(#agr)"/>
-    <text x="278" y="1032" font-family="Space Mono" font-size="9" fill="#3ecf8e" font-weight="700">signal</text>
+    <!-- Gold strategies row -->
+    <g class="sn" id="n-goldlb" onclick="tap('goldlb',this)">
+      <rect class="nr" x="14" y="1024" width="252" height="80" rx="8" fill="#181510" stroke="#3a3020" stroke-width="1"/>
+      <rect x="14" y="1024" width="3" height="80" rx="1.5" fill="#d4af37"/>
+      <text x="30" y="1044" font-family="Space Mono" font-size="8" fill="#d4af37" letter-spacing="1">GOLD</text>
+      <text class="nt" x="30" y="1062" font-family="Space Mono" font-size="11" font-weight="700" fill="#aaa">London Breakout</text>
+      <text x="30" y="1078" font-family="DM Sans" font-size="11" fill="#6a6a75">XAUUSD · H1 · 2.5:1 RR</text>
+      <text x="30" y="1096" font-family="DM Sans" font-size="10" fill="#3e3e4a">Asian range breakout · PF 1.24</text>
+      <rect class="nh" x="14" y="1024" width="252" height="80" rx="8"/>
+    </g>
+
+    <g class="sn" id="n-goldtc" onclick="tap('goldtc',this)">
+      <rect class="nr" x="276" y="1024" width="250" height="80" rx="8" fill="#181510" stroke="#3a3020" stroke-width="1"/>
+      <rect x="276" y="1024" width="3" height="80" rx="1.5" fill="#d4af37"/>
+      <text x="292" y="1044" font-family="Space Mono" font-size="8" fill="#d4af37" letter-spacing="1">GOLD</text>
+      <text class="nt" x="292" y="1062" font-family="Space Mono" font-size="11" font-weight="700" fill="#aaa">Trend Continuation</text>
+      <text x="292" y="1078" font-family="DM Sans" font-size="11" fill="#6a6a75">XAUUSD · H1/H4 · 3.0:1 RR</text>
+      <text x="292" y="1096" font-family="DM Sans" font-size="10" fill="#3e3e4a">EMA50 pullback · PF 1.67</text>
+      <rect class="nh" x="276" y="1024" width="250" height="80" rx="8"/>
+    </g>
+
+    <line class="flow" x1="270" y1="1106" x2="270" y2="1134" stroke="#3ecf8e" stroke-width="1" marker-end="url(#agr)"/>
+    <text x="278" y="1124" font-family="Space Mono" font-size="9" fill="#3ecf8e" font-weight="700">signal</text>
 
     <!-- SECTION: Execution -->
-    <text x="16" y="1062" font-family="Space Mono" font-size="9" fill="#52525e" letter-spacing="2">// EXECUTION</text>
-    <line x1="110" y1="1058" x2="524" y2="1058" stroke="#2a2a38" stroke-width="1"/>
+    <text x="16" y="1154" font-family="Space Mono" font-size="9" fill="#52525e" letter-spacing="2">// EXECUTION</text>
+    <line x1="110" y1="1150" x2="524" y2="1150" stroke="#2a2a38" stroke-width="1"/>
 
     <!-- Sizing -->
     <g class="sn" id="n-sizing" onclick="tap('sizing',this)">
-      <rect class="nr" x="80" y="1070" width="380" height="66" rx="8" fill="#0d160f" stroke="#1a3020" stroke-width="1"/>
-      <rect x="80" y="1070" width="3" height="66" rx="1.5" fill="#3ecf8e"/>
-      <text x="96" y="1090" font-family="Space Mono" font-size="8" fill="#3ecf8e" letter-spacing="1">POSITION SIZING</text>
-      <text class="nt" x="96" y="1108" font-family="Space Mono" font-size="11" font-weight="700" fill="#aaa">Calculate lot size</text>
-      <text x="96" y="1126" font-family="DM Sans" font-size="10" fill="#6a6a75">lots = (balance × 1.0%) ÷ (pips × pip_val)</text>
-      <rect class="nh" x="80" y="1070" width="380" height="66" rx="8"/>
+      <rect class="nr" x="80" y="1162" width="380" height="66" rx="8" fill="#0d160f" stroke="#1a3020" stroke-width="1"/>
+      <rect x="80" y="1162" width="3" height="66" rx="1.5" fill="#3ecf8e"/>
+      <text x="96" y="1182" font-family="Space Mono" font-size="8" fill="#3ecf8e" letter-spacing="1">POSITION SIZING</text>
+      <text class="nt" x="96" y="1200" font-family="Space Mono" font-size="11" font-weight="700" fill="#aaa">Calculate lot size</text>
+      <text x="96" y="1218" font-family="DM Sans" font-size="10" fill="#6a6a75">lots = (balance × 1.0%) ÷ (pips × pip_val)</text>
+      <rect class="nh" x="80" y="1162" width="380" height="66" rx="8"/>
     </g>
-    <line x1="270" y1="1138" x2="270" y2="1166" stroke="#2e2e3e" stroke-width="1" marker-end="url(#a0)"/>
+    <line x1="270" y1="1230" x2="270" y2="1258" stroke="#2e2e3e" stroke-width="1" marker-end="url(#a0)"/>
 
     <!-- SECTION: Risk -->
-    <text x="16" y="1186" font-family="Space Mono" font-size="9" fill="#52525e" letter-spacing="2">// RISK LIMITS</text>
-    <line x1="116" y1="1182" x2="524" y2="1182" stroke="#2a2a38" stroke-width="1"/>
+    <text x="16" y="1278" font-family="Space Mono" font-size="9" fill="#52525e" letter-spacing="2">// RISK LIMITS</text>
+    <line x1="116" y1="1274" x2="524" y2="1274" stroke="#2a2a38" stroke-width="1"/>
 
     <!-- FTMO rules -->
     <g class="sn" id="n-ftmorules" onclick="tap('ftmorules',this)">
-      <rect class="nr" x="14" y="1196" width="248" height="78" rx="8" fill="#0d1014" stroke="#1a2030" stroke-width="1"/>
-      <rect x="14" y="1196" width="3" height="78" rx="1.5" fill="#f06060"/>
-      <text x="30" y="1216" font-family="Space Mono" font-size="8" fill="#f06060" letter-spacing="1">FTMO LIMITS</text>
-      <text class="nt" x="30" y="1234" font-family="Space Mono" font-size="11" font-weight="700" fill="#aaa">5% daily / 10% DD</text>
-      <text x="30" y="1252" font-family="DM Sans" font-size="11" fill="#6a6a75">Official challenge rules</text>
-      <text x="30" y="1268" font-family="DM Sans" font-size="10" fill="#3e3e4a">Hard limits — breach = fail</text>
-      <rect class="nh" x="14" y="1196" width="248" height="78" rx="8"/>
+      <rect class="nr" x="14" y="1288" width="248" height="78" rx="8" fill="#0d1014" stroke="#1a2030" stroke-width="1"/>
+      <rect x="14" y="1288" width="3" height="78" rx="1.5" fill="#f06060"/>
+      <text x="30" y="1308" font-family="Space Mono" font-size="8" fill="#f06060" letter-spacing="1">FTMO LIMITS</text>
+      <text class="nt" x="30" y="1326" font-family="Space Mono" font-size="11" font-weight="700" fill="#aaa">5% daily / 10% DD</text>
+      <text x="30" y="1344" font-family="DM Sans" font-size="11" fill="#6a6a75">Official challenge rules</text>
+      <text x="30" y="1360" font-family="DM Sans" font-size="10" fill="#3e3e4a">Hard limits — breach = fail</text>
+      <rect class="nh" x="14" y="1288" width="248" height="78" rx="8"/>
     </g>
 
     <!-- Bot limits -->
     <g class="sn" id="n-botlimits" onclick="tap('botlimits',this)">
-      <rect class="nr" x="278" y="1196" width="248" height="78" rx="8" fill="#0d160f" stroke="#1a3020" stroke-width="1"/>
-      <rect x="278" y="1196" width="3" height="78" rx="1.5" fill="#3ecf8e"/>
-      <text x="294" y="1216" font-family="Space Mono" font-size="8" fill="#3ecf8e" letter-spacing="1">BOT LIMITS</text>
-      <text class="nt" x="294" y="1234" font-family="Space Mono" font-size="11" font-weight="700" fill="#aaa">3% daily / 7% DD</text>
-      <text x="294" y="1252" font-family="DM Sans" font-size="11" fill="#6a6a75">Self-imposed buffer</text>
-      <text x="294" y="1268" font-family="DM Sans" font-size="10" fill="#3e3e4a">30–40% headroom vs FTMO</text>
-      <rect class="nh" x="278" y="1196" width="248" height="78" rx="8"/>
+      <rect class="nr" x="278" y="1288" width="248" height="78" rx="8" fill="#0d160f" stroke="#1a3020" stroke-width="1"/>
+      <rect x="278" y="1288" width="3" height="78" rx="1.5" fill="#3ecf8e"/>
+      <text x="294" y="1308" font-family="Space Mono" font-size="8" fill="#3ecf8e" letter-spacing="1">BOT LIMITS</text>
+      <text class="nt" x="294" y="1326" font-family="Space Mono" font-size="11" font-weight="700" fill="#aaa">3% daily / 7% DD</text>
+      <text x="294" y="1344" font-family="DM Sans" font-size="11" fill="#6a6a75">Self-imposed buffer</text>
+      <text x="294" y="1360" font-family="DM Sans" font-size="10" fill="#3e3e4a">30–40% headroom vs FTMO</text>
+      <rect class="nh" x="278" y="1288" width="248" height="78" rx="8"/>
     </g>
 
     <!-- Probability -->
     <g class="sn" id="n-prob" onclick="tap('probability',this)">
-      <rect class="nr" x="120" y="1300" width="300" height="54" rx="8" fill="#130f1e" stroke="#2a1a40" stroke-width="1"/>
-      <rect x="120" y="1300" width="3" height="54" rx="1.5" fill="#a78bfa"/>
-      <text x="136" y="1320" font-family="Space Mono" font-size="8" fill="#a78bfa" letter-spacing="1">ASSESSMENT</text>
-      <text class="nt" x="136" y="1338" font-family="Space Mono" font-size="11" font-weight="700" fill="#aaa">Challenge probability</text>
-      <text x="136" y="1350" font-family="DM Sans" font-size="10" fill="#6a6a75">68–70% current · how to improve</text>
-      <rect class="nh" x="120" y="1300" width="300" height="54" rx="8"/>
+      <rect class="nr" x="120" y="1392" width="300" height="54" rx="8" fill="#130f1e" stroke="#2a1a40" stroke-width="1"/>
+      <rect x="120" y="1392" width="3" height="54" rx="1.5" fill="#a78bfa"/>
+      <text x="136" y="1412" font-family="Space Mono" font-size="8" fill="#a78bfa" letter-spacing="1">ASSESSMENT</text>
+      <text class="nt" x="136" y="1430" font-family="Space Mono" font-size="11" font-weight="700" fill="#aaa">Challenge probability</text>
+      <text x="136" y="1442" font-family="DM Sans" font-size="10" fill="#6a6a75">68–70% current · how to improve</text>
+      <rect class="nh" x="120" y="1392" width="300" height="54" rx="8"/>
     </g>
 
     </svg>
@@ -638,21 +659,22 @@ scan_all_symbols()</div>
 manage(new_candle=True)
   → Everything above, PLUS:
   → Increment bars_open per trade
-  → bars_open ≥ 32 → force close (8h exit)</div>
+  → Forex: 32 bars (8h), Gold LB: 96 (24h), Gold TC: 128 (32h)</div>
     <p>The <span class="hl">new_candle</span> flag is critical — <span class="ok">bars_open</span> only increments when a real M15 candle closes, not on every 15-second tick. This ensures the 32-bar time exit fires after exactly 8 hours, not 8 minutes.</p>
     <p>When a trade closes via TP or SL, the bot queries MT5 deal history with a retry loop to handle settlement latency, then sends the confirmed P&L to Telegram. If history hasn't settled after 3 retries, a neutral close notification is sent instead of showing incorrect data.</p>`},
 
-  symbols:{tag:'Instruments',title:'The five symbols',body:`
+  symbols:{tag:'Instruments',title:'Six instruments',body:`
     <table class="tbl">
-      <tr><th>Symbol</th><th>Strategy</th><th>WR</th><th>PF</th></tr>
-      <tr><td>EURUSD</td><td>Momentum</td><td class="ok">45.2%</td><td>1.05</td></tr>
-      <tr><td>AUDUSD</td><td>Momentum</td><td>45.3%</td><td>1.07</td></tr>
-      <tr><td>GBPJPY</td><td>Momentum + Asian BK</td><td class="ok">48.5%</td><td>1.18</td></tr>
-      <tr><td>EURJPY</td><td>Momentum</td><td>47.1%</td><td>1.11</td></tr>
-      <tr><td>GBPUSD</td><td>Momentum</td><td>46.6%</td><td>1.06</td></tr>
+      <tr><th>Symbol</th><th>Strategy</th><th>TF</th><th>PF</th></tr>
+      <tr><td>EURUSD</td><td>Momentum</td><td>M15</td><td>1.05</td></tr>
+      <tr><td>AUDUSD</td><td>Momentum</td><td>M15</td><td>1.07</td></tr>
+      <tr><td>GBPJPY</td><td>Momentum + Asian BK</td><td>M15</td><td>1.18</td></tr>
+      <tr><td>EURJPY</td><td>Momentum</td><td>M15</td><td>1.11</td></tr>
+      <tr><td>GBPUSD</td><td>Momentum</td><td>M15</td><td>1.06</td></tr>
+      <tr><td class="hl">XAUUSD</td><td>London BK + Trend Cont</td><td>H1/H4</td><td>1.24/1.67</td></tr>
     </table>
-    <p>Stats from 2-year backtest (Jan 2023–Mar 2025) at RR 1.3. WR is lower than 1:1 RR by design — higher reward per winner compensates.</p>
-    <p><strong>XAUUSD removed</strong> (PF 1.11, high spreads). <strong>USDJPY rejected</strong> (PF 0.97, losing at RR 1.3).</p>`},
+    <p>Forex stats from 26-month backtest at RR 1.3. XAUUSD uses dedicated gold strategies on H1 timeframe with H4 trend context.</p>
+    <p><strong>USDJPY rejected</strong> (PF 0.97, losing at RR 1.3).</p>`},
 
   c_dd:{tag:'Entry Checklist · 01',title:'DD limits & position cap',body:`
     <p><strong>Daily 3%:</strong> If today's equity dropped 3%, no new entries. FTMO allows 5% — 2% buffer remains for open trades to recover.</p>
@@ -696,7 +718,7 @@ manage(new_candle=True)
 → Block signal if inside window</div>
     <table class="tbl">
       <tr><th>Currency</th><th>Blocked symbols</th></tr>
-      <tr><td>USD</td><td>AUDUSD, GBPUSD</td></tr>
+      <tr><td>USD</td><td>AUDUSD, GBPUSD, XAUUSD</td></tr>
       <tr><td>EUR</td><td>EURJPY</td></tr>
       <tr><td>JPY</td><td>GBPJPY, EURJPY</td></tr>
       <tr><td>AUD</td><td>AUDUSD</td></tr>
@@ -730,6 +752,42 @@ close < low  + bearish → SELL
 SL = opposite range end + 0.3 ATR
 TP = 1.5:1 RR</div>
     <p><strong>Why GBPJPY?</strong> GBP moves sharply at London open. JPY consolidates tightly overnight. The combination creates clean ranges that break decisively when London participants arrive.</p>`},
+
+  goldlb:{tag:'Gold Strategy',title:'London Breakout',body:`
+    <p>XAUUSD only. Trades the breakout of the <strong>Asian session range</strong> when London opens — the same concept as forex Asian Breakout but tuned for gold's characteristics.</p>
+    <div class="cb">asian_high = max(H1 candles 00:00–06:59 broker)
+asian_low  = min(H1 candles 00:00–06:59 broker)
+
+# London open (07:00–10:00 broker):
+H1 close > asian_high → BUY
+H1 close < asian_low  → SELL
+SL = opposite end of Asian range
+TP = 2.5:1 RR</div>
+    <div class="stats">
+      <div class="stat"><div class="sv hl">2.5:1</div><div class="sl">Risk/reward</div></div>
+      <div class="stat"><div class="sv hl">1.24</div><div class="sl">Profit factor</div></div>
+      <div class="stat"><div class="sv">156</div><div class="sl">Trades (26mo)</div></div>
+      <div class="stat"><div class="sv">24h</div><div class="sl">Max duration</div></div>
+    </div>
+    <p><strong>Filters:</strong> Min range 3.0, max range 25.0 (avoids dead or extended sessions). H4 trend must align. One trade per day maximum.</p>`},
+
+  goldtc:{tag:'Gold Strategy',title:'Trend Continuation',body:`
+    <p>XAUUSD only. When gold is <strong>trending on H4</strong>, enters on H1 pullbacks to the EMA50 — buying dips in uptrends, selling rallies in downtrends.</p>
+    <div class="cb">H4: EMA50 > EMA200 → bullish trend
+H1: price pulls back to EMA50
+     within 1× ATR distance
+     rejection candle (body_ratio > 50%)
+     RSI 30–70 (not exhausted)
+
+SL = candle low/high ± 0.5× ATR
+TP = 3.0:1 RR</div>
+    <div class="stats">
+      <div class="stat"><div class="sv hl">3.0:1</div><div class="sl">Risk/reward</div></div>
+      <div class="stat"><div class="sv hl">1.67</div><div class="sl">Profit factor</div></div>
+      <div class="stat"><div class="sv">89</div><div class="sl">Trades (26mo)</div></div>
+      <div class="stat"><div class="sv">32h</div><div class="sl">Max duration</div></div>
+    </div>
+    <p><strong>Why PF 1.67?</strong> This is the highest-quality strategy in the bot. Higher RR (3.0:1) means each winner covers 3 losers. The H4 trend filter ensures you're trading with the dominant flow, not against it.</p>`},
 
   sizing:{tag:'Execution',title:'Position sizing',body:`
     <p>Every trade risks exactly <strong>1.0% of balance</strong>. Lot size is derived from the SL distance so dollar risk is always constant.</p>
@@ -781,7 +839,8 @@ lots   = risk / (pips × pip_value_per_lot)
     <p><span class="ok">2.</span> <s>News filter</s> — <span class="ok">DONE</span>. Auto FF calendar blocks affected symbols during HIGH events. EURUSD exempt.</p>
     <p><span class="ok">3.</span> <s>GBPUSD</s> — <span class="ok">DONE</span>. Added after backtest (PF 1.06, +$6,527/26mo).</p>
     <p><span class="ok">4.</span> <s>Correlation guard</s> — <span class="ok">DONE</span>. Max 2 positions per currency.</p>
-    <p><span class="ok">5.</span> <s>Gradual risk scaling</s> — <span class="ok">DONE</span>. DD-based risk reduction: 2%→70%, 3%→50%, 4%→35%, 5%+→25%.</p>`}
+    <p><span class="ok">5.</span> <s>Gradual risk scaling</s> — <span class="ok">DONE</span>. DD-based risk reduction: 2%→70%, 3%→50%, 4%→35%, 5%+→25%.</p>
+    <p><span class="ok">6.</span> <s>XAUUSD gold strategies</s> — <span class="ok">DONE</span>. London Breakout (PF 1.24) + Trend Continuation (PF 1.67) on H1/H4 timeframes.</p>`}
 };
 
 /* ── STATE ── */
