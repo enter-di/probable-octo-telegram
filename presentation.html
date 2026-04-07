@@ -263,17 +263,17 @@
 <div class="slide bg-title active" id="s0">
     <div style="text-align:center;">
         <div class="badge">● LIVE SYSTEM</div>
-        <h1 style="font-size:54px;font-weight:700;line-height:1.1;margin-bottom:16px;background:linear-gradient(135deg,#fff 0%,var(--green) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
-            FTMO Automated<br>Trading Bot
+        <h1 style="font-size:54px;font-weight:700;line-height:1.1;margin-bottom:16px;background:linear-gradient(135deg,#fff 0%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+            FTMO Gold<br>Trading Bot
         </h1>
         <p style="font-size:18px;color:var(--muted);max-width:520px;margin:0 auto 48px;">
-            Multi-instrument forex system trading 24/7 on MetaTrader 5 — built for FTMO funded accounts
+            XAUUSD-only automated system trading on MetaTrader 5 — built for FTMO funded accounts
         </p>
         <div style="display:flex;gap:48px;justify-content:center;">
-            <div style="text-align:center;"><div class="stat-value">4</div><div class="stat-label">Instruments</div></div>
-            <div style="text-align:center;"><div class="stat-value" style="color:var(--gold)">57.5%</div><div class="stat-label">Backtest Win Rate</div></div>
-            <div style="text-align:center;"><div class="stat-value">1.36</div><div class="stat-label">Profit Factor</div></div>
-            <div style="text-align:center;"><div class="stat-value" style="color:var(--gold)">+24.5%</div><div class="stat-label">6-Month Return</div></div>
+            <div style="text-align:center;"><div class="stat-value" style="color:var(--gold)">XAUUSD</div><div class="stat-label">Gold Only</div></div>
+            <div style="text-align:center;"><div class="stat-value">473</div><div class="stat-label">Backtest Trades</div></div>
+            <div style="text-align:center;"><div class="stat-value">1.43</div><div class="stat-label">Profit Factor</div></div>
+            <div style="text-align:center;"><div class="stat-value" style="color:var(--gold)">+$94.6K</div><div class="stat-label">Net Profit</div></div>
         </div>
     </div>
 </div>
@@ -296,148 +296,155 @@
         </div>
         <div style="text-align:center;color:var(--green);font-size:20px;margin-bottom:28px;animation:arrow-pulse 1.5s infinite;">↕ Telegram ↕</div>
         <div class="grid-3">
-            <div class="card"><h3>⏱ 15-second cycle</h3><p>Scans every candle close across all 4 instruments simultaneously</p></div>
+            <div class="card"><h3>⏱ 15-second cycle</h3><p>Scans every candle close on XAUUSD with two independent strategies</p></div>
             <div class="card"><h3>🔄 Fully autonomous</h3><p>No manual intervention required — risk, sizing, entries and exits all automated</p></div>
             <div class="card"><h3>📱 Telegram control</h3><p>/status /trades /why — full visibility from your phone anywhere in the world</p></div>
         </div>
     </div>
 </div>
 
-<!-- ═══ SLIDE 3: INSTRUMENTS ═══ -->
+<!-- ═══ SLIDE 3: INSTRUMENT ═══ -->
 <div class="slide bg-r2" id="s2">
     <div class="slide-content">
         <div class="slide-header">
             <div class="section-tag">What We Trade</div>
-            <h2>4 Instruments, Selected by Data</h2>
+            <h2>XAUUSD Only — Gold-Focused</h2>
         </div>
-        <div class="grid-4" style="margin-bottom:20px;">
-            <div class="card green-border glow-green">
-                <div style="font-size:22px;margin-bottom:10px;">💶</div>
-                <h3>EURUSD</h3>
-                <p>Most liquid pair. Momentum only.</p>
-                <div style="margin-top:12px;font-size:11px;color:var(--green);">Max spread: 1.5 pips</div>
+        <div class="grid-2" style="margin-bottom:20px;">
+            <div class="card gold-border glow-gold">
+                <div style="font-size:22px;margin-bottom:10px;">🥇</div>
+                <h3 style="color:var(--gold);">Gold London Breakout</h3>
+                <p>Asian range breakout at London open. H1 timeframe.</p>
+                <div style="margin-top:12px;display:flex;gap:16px;font-size:12px;">
+                    <span>PF <strong class="num-gold">1.25</strong></span>
+                    <span>RR <strong class="num-gold">2.5:1</strong></span>
+                    <span><strong>274</strong> trades</span>
+                </div>
             </div>
-            <div class="card green-border">
-                <div style="font-size:22px;margin-bottom:10px;">🦘</div>
-                <h3>AUDUSD</h3>
-                <p>Commodity currency. Momentum only.</p>
-                <div style="margin-top:12px;font-size:11px;color:var(--green);">Max spread: 1.8 pips</div>
-            </div>
-            <div class="card green-border">
-                <div style="font-size:22px;margin-bottom:10px;">🇬🇧</div>
-                <h3>GBPJPY</h3>
-                <p>High volatility. Both strategies.</p>
-                <div style="margin-top:12px;font-size:11px;color:var(--green);">Max spread: 5.0 pips</div>
-            </div>
-            <div class="card green-border">
-                <div style="font-size:22px;margin-bottom:10px;">🇯🇵</div>
-                <h3>EURJPY</h3>
-                <p>Strong trends. Momentum only.</p>
-                <div style="margin-top:12px;font-size:11px;color:var(--green);">Max spread: 2.8 pips</div>
+            <div class="card gold-border glow-gold">
+                <div style="font-size:22px;margin-bottom:10px;">📈</div>
+                <h3 style="color:var(--gold);">Gold Trend Continuation</h3>
+                <p>H4 trend + H1 EMA50 pullback entries.</p>
+                <div style="margin-top:12px;display:flex;gap:16px;font-size:12px;">
+                    <span>PF <strong class="num-gold">1.64</strong></span>
+                    <span>RR <strong class="num-gold">3.0:1</strong></span>
+                    <span><strong>199</strong> trades</span>
+                </div>
             </div>
         </div>
         <div class="card" style="background:rgba(255,71,87,0.05);border-color:rgba(255,71,87,0.2);">
-            <p style="font-size:13px;">❌  <strong style="color:var(--text)">XAUUSD (Gold) was tested and removed</strong> — Profit Factor of 1.11 was insufficient to justify high spreads and volatility risk. Only pairs with PF > 1.25 are included.</p>
+            <p style="font-size:13px;">❌  <strong style="color:var(--text)">Forex momentum disabled</strong> — PF 0.90 after costs ($7/lot commission + 0.5 pip slippage). Net-negative across all 5 forex pairs. Gold-only portfolio is cleaner: combined PF ~1.43, 473 trades, +$94.6K net.</p>
+        </div>
+        <div class="card" style="margin-top:12px;">
+            <p style="font-size:13px;">Max spread: <strong class="num-gold">80 points</strong> &nbsp;|&nbsp; News filter: <strong>USD events only</strong> &nbsp;|&nbsp; Risk: <strong>0.7% per trade</strong></p>
         </div>
     </div>
 </div>
 
-<!-- ═══ SLIDE 4: MOMENTUM STRATEGY ═══ -->
+<!-- ═══ SLIDE 4: GOLD LONDON BREAKOUT ═══ -->
 <div class="slide bg-r1" id="s3">
     <div class="slide-content">
         <div class="slide-header">
             <div class="section-tag">Strategy 1 of 2</div>
-            <h2>Momentum Burst</h2>
+            <h2>Gold London Breakout</h2>
         </div>
         <div class="grid-2">
             <div style="display:flex;flex-direction:column;gap:16px;">
-                <div class="card green-border">
-                    <h3 style="color:var(--green);margin-bottom:14px;">Entry Conditions</h3>
-                    <div style="font-size:13px;display:flex;flex-direction:column;gap:9px;">
-                        <div>📏 Candle body <strong>&gt; 1.2× ATR</strong> (exceptional candle size)</div>
-                        <div>📊 Body ratio <strong>&gt; 65%</strong> of full high-low range</div>
-                        <div>📈 RSI between <strong>28 – 72</strong> (no extreme levels)</div>
-                        <div>📉 H1 trend alignment via <strong>EMA 50 / 200</strong></div>
-                        <div>⏰ Session only: <strong>08:30 – 19:30 London time</strong></div>
+                <div class="card gold-border">
+                    <h3 style="color:var(--gold);margin-bottom:14px;">3-Phase Execution</h3>
+                    <div style="font-size:13px;display:flex;flex-direction:column;gap:14px;">
+                        <div>
+                            <div style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">Phase 1 — Asian Session (00:00–06:59 broker)</div>
+                            Bot records the overnight <strong>consolidation high and low</strong> on H1
+                        </div>
+                        <div>
+                            <div style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">Phase 2 — London Open (07:00–10:00 broker)</div>
+                            Bot monitors for a <strong>decisive H1 close outside the range</strong>
+                        </div>
+                        <div>
+                            <div style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">Phase 3 — Execute</div>
+                            Entry on confirmed breakout, SL at opposite side of Asian range. TP = <strong class="num-gold">2.5:1 RR</strong>
+                        </div>
                     </div>
                 </div>
                 <div class="card">
                     <h3 style="margin-bottom:12px;">Trade Parameters</h3>
                     <div style="font-size:13px;display:flex;flex-direction:column;gap:7px;">
-                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Stop Loss</span><span>Candle low/high ± 0.3× ATR</span></div>
-                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Take Profit</span><span class="num-green">1:1 Risk-Reward</span></div>
-                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Time exit</span><span>32 bars max (8 hours)</span></div>
-                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Cooldown</span><span>12 bars between entries</span></div>
-                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Max per day</span><span>2 trades per symbol</span></div>
+                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Instrument</span><span>XAUUSD only</span></div>
+                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Take Profit</span><span class="num-gold">2.5:1 Risk-Reward</span></div>
+                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Time exit</span><span>96 bars max (24 hours)</span></div>
+                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Risk per trade</span><span>0.7%</span></div>
+                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Max per day</span><span>1 trade</span></div>
                     </div>
                 </div>
             </div>
             <div class="card" style="display:flex;flex-direction:column;gap:20px;">
                 <h3>Live Signal Example</h3>
                 <div style="font-family:monospace;font-size:13px;background:rgba(0,0,0,0.35);padding:16px;border-radius:10px;line-height:2.1;">
-                    <div style="color:var(--green);font-weight:bold;">BUY  EURUSD  #123456</div>
-                    <div style="color:var(--muted);">Momentum  •  0.50 lots  •  1:1 RR</div>
-                    <div style="margin-top:6px;">Entry &nbsp;<span style="color:var(--text)">1.08542</span></div>
-                    <div>SL &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--red)">1.08392</span></div>
-                    <div>TP &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--green)">1.08692</span></div>
-                    <div style="margin-top:6px;color:var(--muted);font-size:11px;">Body=0.00210  ATR=0.00175  RSI=58</div>
+                    <div style="color:var(--gold);font-weight:bold;">BUY  XAUUSD  #789012</div>
+                    <div style="color:var(--muted);">Gold LB  •  4.67 lots  •  2.5:1 RR</div>
+                    <div style="margin-top:6px;">Entry &nbsp;<span style="color:var(--text)">2,345.50</span></div>
+                    <div>SL &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--red)">2,330.50</span></div>
+                    <div>TP &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--green)">2,383.00</span></div>
+                    <div style="margin-top:6px;color:var(--muted);font-size:11px;">Asian range: 2,328–2,344  H4 trend: bullish</div>
                 </div>
                 <div>
-                    <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Momentum Strength Indicator</div>
-                    <div class="momentum-bar" style="color:var(--green);">▰▰▰▰▰▰▰▰ 100% — Signal fired</div>
-                    <div class="momentum-bar" style="color:var(--green);opacity:.65;">▰▰▰▰▰▱▱▱ 69% — Watching</div>
-                    <div class="momentum-bar" style="color:var(--muted);">▰▰▰▱▱▱▱▱ 35% — No signal</div>
+                    <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Backtest Performance</div>
+                    <div style="display:flex;gap:16px;">
+                        <div><div class="stat-value" style="font-size:24px;color:var(--gold)">1.25</div><div class="stat-label">Profit Factor</div></div>
+                        <div><div class="stat-value" style="font-size:24px;">274</div><div class="stat-label">Trades</div></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- ═══ SLIDE 5: ASIAN BREAKOUT ═══ -->
+<!-- ═══ SLIDE 5: GOLD TREND CONTINUATION ═══ -->
 <div class="slide bg-r3" id="s4">
     <div class="slide-content">
         <div class="slide-header">
             <div class="section-tag">Strategy 2 of 2</div>
-            <h2>Asian Range Breakout</h2>
+            <h2>Gold Trend Continuation</h2>
         </div>
         <div class="grid-2">
             <div style="display:flex;flex-direction:column;gap:16px;">
-                <div class="card blue-border">
-                    <h3 style="color:var(--blue);margin-bottom:14px;">3-Phase Execution</h3>
+                <div class="card gold-border">
+                    <h3 style="color:var(--gold);margin-bottom:14px;">Entry Conditions</h3>
                     <div style="font-size:13px;display:flex;flex-direction:column;gap:14px;">
                         <div>
-                            <div style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">Phase 1 — Overnight (00:00–08:00 London)</div>
-                            Bot records the overnight <strong>consolidation high and low</strong>
+                            <div style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">H4 Trend Detection</div>
+                            EMA50 > EMA200 = bullish trend. <strong>Only trade with the trend.</strong>
                         </div>
                         <div>
-                            <div style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">Phase 2 — London Open Watch (08:00–10:00)</div>
-                            Bot monitors for a <strong>decisive close outside the range</strong>
+                            <div style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">H1 Pullback Entry</div>
+                            Price pulls back to <strong>EMA50 within 1x ATR</strong>, rejection candle with body ratio > 50%
                         </div>
                         <div>
-                            <div style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">Phase 3 — Execute</div>
-                            Entry on confirmed breakout candle, SL at opposite side of Asian range
+                            <div style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">Risk/Reward</div>
+                            SL = candle extremity +/- 0.5x ATR. TP = <strong class="num-gold">3.0:1 RR</strong>
                         </div>
                     </div>
                 </div>
                 <div class="card">
                     <h3 style="margin-bottom:12px;">Parameters</h3>
                     <div style="font-size:13px;display:flex;flex-direction:column;gap:7px;">
-                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Instrument</span><span>GBPJPY only</span></div>
-                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Valid range size</span><span>0.5× – 4.0× ATR</span></div>
-                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Take Profit</span><span class="num-gold">1.5:1 Risk-Reward</span></div>
-                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Trend filter</span><span>H1 EMA 50/200</span></div>
+                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Instrument</span><span>XAUUSD only</span></div>
+                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Timeframe</span><span>H1 entry / H4 trend</span></div>
+                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Take Profit</span><span class="num-gold">3.0:1 Risk-Reward</span></div>
+                        <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted)">Time exit</span><span>128 bars max (32 hours)</span></div>
                     </div>
                 </div>
             </div>
             <div class="card gold-border glow-gold" style="display:flex;flex-direction:column;justify-content:space-between;">
                 <div>
-                    <h3 style="color:var(--gold);margin-bottom:14px;">Why This Works</h3>
-                    <p style="margin-bottom:16px;">Asian session creates a defined price range as liquidity is low. At London open, institutional order flow breaks the range with strong momentum — a predictable daily pattern in forex markets.</p>
-                    <p>The bot captures this move with a superior <strong style="color:var(--gold)">1.5:1 risk-reward ratio</strong> — higher than the momentum strategy — because breakout moves tend to run further after a clean range hold.</p>
+                    <h3 style="color:var(--gold);margin-bottom:14px;">Why PF 1.64?</h3>
+                    <p style="margin-bottom:16px;">This is the highest-quality strategy in the bot. The 3.0:1 risk-reward means each winner covers 3 losers. The H4 trend filter ensures you only trade with the dominant flow — buying dips in uptrends, selling rallies in downtrends.</p>
+                    <p>Combined with London Breakout, the two gold strategies complement each other: <strong style="color:var(--gold)">LB captures range breaks, TC captures trend pullbacks</strong>. Both can be active simultaneously.</p>
                 </div>
                 <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border);">
-                    <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">Once per day, per symbol — no repeat entries</div>
-                    <div style="font-size:12px;color:var(--muted);">Range too tight or too wide → no trade (volatility filter)</div>
+                    <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">199 trades | PF 1.64 | All costs included</div>
+                    <div style="font-size:12px;color:var(--muted);">RSI 30–70 filter prevents exhausted entries</div>
                 </div>
             </div>
         </div>
@@ -456,7 +463,7 @@
                 <h3 style="color:var(--green);margin-bottom:18px;">Core Risk Rules</h3>
                 <div class="risk-item">
                     <div><div style="font-size:13px;font-weight:600;">Risk per trade</div><div style="font-size:11px;color:var(--muted);">Auto-calculated from current balance</div></div>
-                    <div class="num-green" style="font-size:18px;">0.5%</div>
+                    <div class="num-green" style="font-size:18px;">0.7%</div>
                 </div>
                 <div class="risk-item">
                     <div><div style="font-size:13px;font-weight:600;">Daily loss limit</div><div style="font-size:11px;color:var(--muted);">FTMO allows 5% — we cap at 3%</div></div>
@@ -479,7 +486,7 @@
                 <div class="card">
                     <h3 style="margin-bottom:12px;">Auto Position Sizing</h3>
                     <div style="font-family:monospace;font-size:12px;background:rgba(0,0,0,0.3);padding:12px;border-radius:8px;color:var(--green);line-height:1.9;">
-                        risk_amount = balance × 0.5%<br>
+                        risk_amount = balance × 0.7%<br>
                         lots = risk ÷ (SL_pips × pip_value)<br>
                         <span style="color:var(--muted)">— scales automatically as account grows</span>
                     </div>
@@ -487,12 +494,12 @@
                 <div class="card">
                     <h3 style="margin-bottom:12px;">Additional Safeguards</h3>
                     <div style="font-size:13px;display:flex;flex-direction:column;gap:7px;">
-                        <div>✅ Max 3 open positions at any time</div>
-                        <div>✅ Max 1 position per symbol</div>
-                        <div>✅ Max 2 trades per symbol per day</div>
+                        <div>✅ Max 2 open positions (one per strategy)</div>
+                        <div>✅ Max 1 trade per strategy at a time</div>
+                        <div>✅ Max 2 trades per day on XAUUSD</div>
                         <div>✅ Spread filter — blocks news spike entries</div>
-                        <div>✅ Friday close at 20:00 London</div>
-                        <div>✅ Half risk auto-applied at 4% drawdown</div>
+                        <div>✅ Friday close at 23:00 UTC</div>
+                        <div>✅ Gradual DD scaling (risk reduces with drawdown)</div>
                     </div>
                 </div>
             </div>
@@ -505,34 +512,34 @@
     <div class="slide-content">
         <div class="slide-header">
             <div class="section-tag">Validation</div>
-            <h2>Backtest Results &amp; First Live Day</h2>
+            <h2>Backtest Results &amp; Validation</h2>
         </div>
         <div class="grid-4" style="margin-bottom:22px;">
-            <div class="card" style="text-align:center;"><div class="stat-value">313</div><div class="stat-label">Total Trades</div></div>
-            <div class="card" style="text-align:center;"><div class="stat-value" style="color:var(--gold)">57.5%</div><div class="stat-label">Win Rate</div></div>
-            <div class="card" style="text-align:center;"><div class="stat-value">1.36</div><div class="stat-label">Profit Factor</div></div>
-            <div class="card" style="text-align:center;"><div class="stat-value" style="color:var(--gold)">3.58%</div><div class="stat-label">Max Drawdown</div></div>
+            <div class="card" style="text-align:center;"><div class="stat-value">473</div><div class="stat-label">Total Trades</div></div>
+            <div class="card" style="text-align:center;"><div class="stat-value" style="color:var(--gold)">1.43</div><div class="stat-label">Profit Factor</div></div>
+            <div class="card" style="text-align:center;"><div class="stat-value">+$94.6K</div><div class="stat-label">Net Profit</div></div>
+            <div class="card" style="text-align:center;"><div class="stat-value" style="color:var(--gold)">84%</div><div class="stat-label">FTMO-Safe (MC)</div></div>
         </div>
         <div class="grid-2">
             <div class="card">
-                <h3 style="margin-bottom:14px;">Backtest vs Live Expectation</h3>
+                <h3 style="margin-bottom:14px;">Backtest Validation</h3>
                 <table class="data-table">
-                    <tr><th>Metric</th><th>Backtest</th><th>Est. Live</th></tr>
-                    <tr><td>Win Rate</td><td class="num-green">57.5%</td><td>52–55%</td></tr>
-                    <tr><td>Profit Factor</td><td class="num-green">1.36</td><td>1.15–1.25</td></tr>
-                    <tr><td>Monthly Return</td><td class="num-green">~4.0%</td><td>2.0–3.0%</td></tr>
-                    <tr><td>Max Drawdown</td><td class="num-green">3.58%</td><td>5–7%</td></tr>
+                    <tr><th>Strategy</th><th>PF</th><th>RR</th><th>Trades</th></tr>
+                    <tr><td>Gold London Breakout</td><td class="num-gold">1.25</td><td>2.5:1</td><td>274</td></tr>
+                    <tr><td>Gold Trend Continuation</td><td class="num-gold">1.64</td><td>3.0:1</td><td>199</td></tr>
+                    <tr><td style="font-weight:700;">Combined</td><td class="num-green">1.43</td><td>—</td><td>473</td></tr>
                 </table>
+                <div style="font-size:12px;color:var(--muted);margin-top:10px;">$7/lot commission + 0.5 pip slippage baked into all results</div>
             </div>
             <div class="card gold-border glow-gold">
-                <h3 style="color:var(--gold);margin-bottom:14px;">Live Trading — March 17, 2026</h3>
+                <h3 style="color:var(--gold);margin-bottom:14px;">Validation Results</h3>
                 <div style="font-size:13px;display:flex;flex-direction:column;gap:9px;">
-                    <div style="display:flex;justify-content:space-between;padding:9px 12px;background:rgba(0,229,160,0.08);border-radius:7px;"><span>EURUSD BUY</span><span class="num-green">✅ TP Hit</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:9px 12px;background:rgba(0,229,160,0.08);border-radius:7px;"><span>AUDUSD BUY</span><span class="num-green">✅ TP Hit</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:9px 12px;background:rgba(0,229,160,0.08);border-radius:7px;"><span>EURJPY BUY</span><span class="num-green">✅ TP Hit</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:9px 12px;background:rgba(0,229,160,0.08);border-radius:7px;"><span>Monte Carlo (2,000 sims)</span><span class="num-green">84% FTMO-safe</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:9px 12px;background:rgba(0,229,160,0.08);border-radius:7px;"><span>Walk-forward</span><span class="num-green">3/4 folds profitable OOS</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:9px 12px;background:rgba(0,229,160,0.08);border-radius:7px;"><span>Monthly return</span><span class="num-green">~$2,547 on $100K</span></div>
                     <div style="display:flex;justify-content:space-between;padding:9px 12px;background:rgba(255,201,71,0.1);border-radius:7px;border:1px solid rgba(255,201,71,0.25);">
-                        <span style="color:var(--gold);font-weight:600;">Day P&amp;L</span>
-                        <span style="color:var(--gold);font-weight:700;">$99,754 → $100,662</span>
+                        <span style="color:var(--gold);font-weight:600;">Phase 1 target</span>
+                        <span style="color:var(--gold);font-weight:700;">~3.9 months</span>
                     </div>
                 </div>
             </div>
@@ -679,13 +686,13 @@ const SLIDES   = document.querySelectorAll('.slide');
 const TOTAL    = SLIDES.length;
 
 const NARRATION = [
-    "Welcome. This is an overview of a fully automated FTMO trading system — built to trade forex markets 24 hours a day and generate consistent monthly income through a prop firm funded account.",
-    "The system runs on a Windows server in London, connecting directly to MetaTrader 5 and the FTMO trading server. Every 15 seconds, the Python bot scans the market, manages open trades, and enforces risk rules — completely autonomously. You stay in control via Telegram notifications on your phone.",
-    "The bot trades four carefully selected forex pairs: Euro Dollar, Aussie Dollar, British Pound Yen, and Euro Yen. Each pair was chosen through rigorous backtesting — only instruments with a profit factor above 1.25 made the cut. Gold was tested and removed because its high spreads made the edge insufficient.",
-    "The primary strategy is called Momentum Burst. When a 15-minute candle shows exceptional strength — body larger than 1.2 times the Average True Range — the bot recognises a high-probability signal. It only trades in the direction of the hourly trend, and RSI filters prevent entries at extreme levels. Risk-reward is 1 to 1.",
-    "The second strategy is the Asian Range Breakout, used on British Pound Yen. Overnight, the bot measures the consolidation range. At London open, if price breaks cleanly with a confirmed close, the bot enters — targeting 1.5 times the risk. This captures predictable institutional order flow at the London session open.",
-    "Risk management is built specifically for FTMO compliance. Each trade risks exactly 0.5% of balance — calculated and sized automatically. The daily loss limit is self-imposed at 3%, well below FTMO's 5% allowance. An emergency close triggers at 4% daily or 8.5% overall drawdown. No manual oversight required.",
-    "Six months of backtesting across 313 trades shows a 57.5% win rate, profit factor of 1.36, and a total return of 24.5% with maximum drawdown of just 3.58 percent. On the first live trading day — March 17th 2026 — all three signals hit take profit, growing the balance from 99,754 to 100,662 US dollars.",
+    "Welcome. This is an overview of a fully automated FTMO trading system — built to trade gold exclusively and generate consistent monthly income through a prop firm funded account.",
+    "The system runs on a Windows server in London, connecting directly to MetaTrader 5 and the FTMO trading server. Every 15 seconds, the Python bot scans XAUUSD, manages open trades, and enforces risk rules — completely autonomously. You stay in control via Telegram notifications on your phone.",
+    "The bot trades XAUUSD only — gold. Two dedicated gold strategies with a combined profit factor of 1.43 across 473 backtest trades, generating 94,584 dollars net profit with all costs included. Forex momentum was tested and disabled — profit factor 0.90 after costs made it net-negative.",
+    "The primary strategy is Gold London Breakout. Overnight, the bot records the Asian session consolidation range on H1. At London open, if gold breaks decisively outside the range, the bot enters with a 2.5 to 1 risk-reward ratio. Profit factor 1.25 across 274 trades, all costs included.",
+    "The second strategy is Gold Trend Continuation. When gold is trending on the H4 timeframe, the bot enters on H1 pullbacks to the EMA50 — buying dips in uptrends, selling rallies in downtrends. With a 3.0 to 1 risk-reward and profit factor of 1.64, this is the highest-quality strategy in the bot.",
+    "Risk management is built specifically for FTMO compliance. Each trade risks exactly 0.7% of balance — calculated and sized automatically. The daily loss limit is self-imposed at 3%, well below FTMO's 5% allowance. An emergency close triggers at 4% daily or 8.5% overall drawdown. No manual oversight required.",
+    "Backtesting across 473 trades shows a combined profit factor of 1.43 and net profit of 94,584 dollars with costs. Monte Carlo simulation with 2,000 runs confirms 84% probability of staying under FTMO's 10% drawdown limit. Walk-forward testing shows 3 out of 4 folds profitable out-of-sample. Monthly return approximately 2,547 dollars on 100K.",
     "FTMO's scaling plan is the compounding engine behind this system. Every 4 months, when the account generates 10% net profit — that is 2.5% per month — FTMO increases the account balance by 25% and upgrades the profit split from 80% to 90% permanently. One account growing from 100,000 reaches nearly 200,000 within the first year alone.",
     "With three funded accounts running in parallel by the end of 2027, projected monthly income reaches 14,480 Singapore dollars. Account one, scaled after 15 months, pays 5,930 per month. Account two contributes 4,750. Account three adds 3,800. The same bot code, three separate environment files — no new strategies required.",
     "The system is live. The strategy is validated. The plan is clear. Three funded accounts, automated execution, compounding growth through FTMO's scaling plan. By the end of 2027 — over 14,000 Singapore dollars per month, fully autonomous."
